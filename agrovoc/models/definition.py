@@ -12,6 +12,10 @@ class Definition(RdfResourceBackedModel):
     def modified(self) -> datetime | None:
         return self._optional_value(DCTERMS.modified, self._map_term_to_datetime)
 
+    @classmethod
+    def rdf_type_uri(cls) -> URIRef:
+        raise NotImplementedError
+
     @property
     def source(self) -> URIRef:
         return self._required_value(DCTERMS.source, self._map_term_to_uri)
