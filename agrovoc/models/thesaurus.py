@@ -1,5 +1,7 @@
 from collections.abc import Iterable
-from rdflib import Graph
+from rdflib import RDF, SKOS, Graph
+
+from agrovoc.models.concept import Concept
 
 
 class Thesaurus:
@@ -7,5 +9,6 @@ class Thesaurus:
         self.__graph = graph
 
     @property
-    def concepts(self) -> Iterable[skos.Concept]:
-        pass
+    def concepts(self) -> Iterable[Concept]:
+        for uri in self.__graph.subjects(predicate=RDF.type, object=SKOS.Concept):
+            yield Concept(resource=self.__graph.resource(uri))

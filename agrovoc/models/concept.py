@@ -1,13 +1,13 @@
 from collections.abc import Iterable
 from datetime import datetime
-from graphs2go.models.skos.concept import Concept as SkosConcept
+from graphs2go.models import skos
 from rdflib import DCTERMS, SKOS
 
 from agrovoc.models.definition import Definition
 from agrovoc.models.label import Label
 
 
-class Concept(SkosConcept):
+class Concept(skos.Concept):
     _LABEL_CLASS = Label
 
     @property

@@ -1,9 +1,9 @@
 from datetime import datetime
-from graphs2go.models.skos.label import Label as SkosLabel
+from graphs2go.models import skos
 from rdflib import DCTERMS, SKOS, Literal
 
 
-class Label(SkosLabel):
+class Label(skos.Label):
     @property
     def created(self) -> datetime:
         return self._required_value(DCTERMS.created, self._map_term_to_datetime)

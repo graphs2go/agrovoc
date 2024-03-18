@@ -1,6 +1,8 @@
 import pytest
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
+from rdflib import Graph
+from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.resources.release_config import ReleaseConfig
 from agrovoc.models.release import Release
 from agrovoc.utils.find_releases import find_releases
@@ -17,3 +19,8 @@ def release(release_config: ReleaseConfig) -> Release:
 @pytest.fixture(scope="session")
 def release_config() -> ReleaseConfig:
     return ReleaseConfig.default()
+
+
+@pytest.fixture(scope="session")
+def thesaurus(release: Release) -> Thesaurus:
+    return Thesaurus(graph=Graph().parse(release.nt_file_path))
