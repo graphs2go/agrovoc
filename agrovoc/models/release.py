@@ -1,4 +1,5 @@
 from __future__ import annotations
+from base64 import b64decode, b64encode
 from datetime import date
 import os.path
 from pathlib import Path
@@ -20,9 +21,17 @@ class Release:
             raise ValueError(str(file_path) + " file name has incorrect format")
         self.__version = date.fromisoformat(file_stem_split[1])
 
+    @classmethod
+    def from_partition_key(cls, partition_key: str) -> Release:
+        return Release(Path(b64decode(partition_key).decode("utf-8")))
+
     @property
     def nt_file_path(self) -> Path:
         return self.__nt_file_path
+
+    def to_partition_key(self) -> str:
+        # Getting around https://github.com/dagster-io/dagster/issues/16064
+        return b64encode(str(self.__nt_file_path).encode("utf-8")).decode("ascii")
 
     @property
     def version(self) -> date:
