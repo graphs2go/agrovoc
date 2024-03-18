@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+poetry run black --check agrovoc tests
+poetry run mypy agrovoc tests
+poetry run ruff agrovoc tests
+export PYTHONPATH=$PWD
+poetry run pytest tests
