@@ -2,9 +2,10 @@ import pytest
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
 from rdflib import Graph
+
+from agrovoc.models.release import Release
 from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.resources.release_config import ReleaseConfig
-from agrovoc.models.release import Release
 from agrovoc.utils.find_releases import find_releases
 
 load_dotenv()

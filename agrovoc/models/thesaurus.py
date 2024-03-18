@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+
 from rdflib import RDF, SKOS, Graph
 
 from agrovoc.models.concept import Concept

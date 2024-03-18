@@ -1,7 +1,8 @@
 from __future__ import annotations
+
+import os.path
 from base64 import b64decode, b64encode
 from datetime import date
-import os.path
 from pathlib import Path
 
 

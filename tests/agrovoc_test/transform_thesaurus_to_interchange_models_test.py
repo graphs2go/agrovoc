@@ -1,9 +1,10 @@
 import pytest
+from graphs2go.models import interchange
+
+from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.transform_thesaurus_to_interchange_models import (
     transform_thesaurus_to_interchange_models,
 )
-from agrovoc.models.thesaurus import Thesaurus
-from graphs2go.models import interchange
 
 
 def test_transform(thesaurus: Thesaurus) -> None:

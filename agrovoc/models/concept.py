@@ -1,5 +1,6 @@
 from collections.abc import Iterable
 from datetime import datetime
+
 from graphs2go.models import skos
 from rdflib import DCTERMS, SKOS
 

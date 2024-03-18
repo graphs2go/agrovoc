@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from graphs2go.models.rdf_resource_backed_model import RdfResourceBackedModel
 from rdflib import DCTERMS, RDF, Literal, URIRef
 

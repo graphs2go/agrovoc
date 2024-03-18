@@ -1,11 +1,12 @@
 from collections.abc import Iterable
 
+from graphs2go.models import interchange
+from graphs2go.namespaces.skosxl import SKOSXL
 from rdflib import SKOS, URIRef
+
 from agrovoc.models.concept import Concept
 from agrovoc.models.label import Label
 from agrovoc.models.thesaurus import Thesaurus
-from graphs2go.models import interchange
-from graphs2go.namespaces.skosxl import SKOSXL
 
 
 def transform_thesaurus_to_interchange_models(
