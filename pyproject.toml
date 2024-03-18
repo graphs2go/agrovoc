@@ -19,7 +19,6 @@ black = "^24.2.0"
 mypy = "^1.8.0"
 pytest = "^8.0.1"
 ruff = "^0.2.2"
-pandas-stubs = "^2.1.4.231227"
 dagster-webserver = "^1.6.5"
 graphs2go = { path = "../shared", develop = true }
 isort = "^5.13.2"
