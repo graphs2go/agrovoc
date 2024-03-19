@@ -1,6 +1,8 @@
 from dagster import asset, get_dagster_logger
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
-import pyoxigraph
+from graphs2go.rdf_stores.oxigraph_rdf_store import OxigraphRdfStore
+from graphs2go.rdf_stores.rdf_store import RdfStore
+from rdflib import URIRef
 
 from agrovoc.releases_partitions_definition import releases_partitions_definition
 from agrovoc.models.release import Release
@@ -11,31 +13,26 @@ from agrovoc.models.release_graph import ReleaseGraph
 def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
     logger = get_dagster_logger()
 
-    rdf_store_config_parsed = rdf_store_config.parse()
-    assert rdf_store_config_parsed.directory_path
-    oxigraph_directory_path = (
-        rdf_store_config_parsed.directory_path / "agrovoc" / release.version.isoformat()
-    )
+    with RdfStore.create(
+        identifier=URIRef("urn:agrovoc_release:" + release.version.isoformat()),
+        rdf_store_config=rdf_store_config,
+    ) as rdf_store:
+        if rdf_store.is_empty:
+            if not isinstance(rdf_store, OxigraphRdfStore):
+                raise NotImplementedError
+            logger.info(
+                "building Oxigraph from %s",
+                release.nt_file_path,
+            )
+            # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
+            rdf_store.pyoxigraph_store.bulk_load(
+                release.nt_file_path, mime_type="application/n-triples"
+            )
+            logger.info(
+                "built Oxigraph from %s",
+                release.nt_file_path,
+            )
+        else:
+            logger.info("reusing existing Oxigraph")
 
-    if oxigraph_directory_path.is_dir():
-        logger.info("reusing existing Oxigraph %s", oxigraph_directory_path)
-    else:
-        oxigraph_directory_path.mkdir(parents=True, exist_ok=True)
-        store = pyoxigraph.Store(oxigraph_directory_path)
-        logger.info(
-            "building %s Oxigraph from %s",
-            oxigraph_directory_path,
-            release.nt_file_path,
-        )
-        # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
-        store.bulk_load(release.nt_file_path, mime_type="application/n-triples")
-        logger.info(
-            "built %s Oxigraph from %s",
-            oxigraph_directory_path,
-            release.nt_file_path,
-        )
-        del store
-
-    return ReleaseGraph(
-        oxigraph_directory_path=oxigraph_directory_path, release=release
-    )
+        return ReleaseGraph(rdf_store_descriptor=rdf_store.descriptor, release=release)

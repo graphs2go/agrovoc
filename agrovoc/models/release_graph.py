@@ -1,9 +1,7 @@
 from dataclasses import dataclass
-from pathlib import Path
 
-import oxrdflib
-import pyoxigraph
 from rdflib import ConjunctiveGraph, Graph
+from graphs2go.rdf_stores.rdf_store import RdfStore
 
 from agrovoc.models.release import Release
 
@@ -14,7 +12,7 @@ class ReleaseGraph:
     Picklable descriptor of an rdflib.Graph containing an AGROVOC release.
     """
 
-    oxigraph_directory_path: Path
+    rdf_store_descriptor: RdfStore.Descriptor
     release: Release
 
     def to_rdflib_graph(self) -> Graph:
@@ -23,7 +21,5 @@ class ReleaseGraph:
         """
 
         return ConjunctiveGraph(
-            store=oxrdflib.OxigraphStore(
-                store=pyoxigraph.Store(self.oxigraph_directory_path)
-            )
+            RdfStore.open(self.rdf_store_descriptor).to_rdflib_store()
         )
