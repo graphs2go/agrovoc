@@ -21,7 +21,9 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope="session")
 def oxigraph_config() -> OxigraphConfig:
-    return OxigraphConfig.default()
+    return OxigraphConfig.default(
+        directory_path_default=Path(__file__).parent.parent.parent / "data" / "oxigraph"
+    )
 
 
 @pytest.fixture(scope="session")
@@ -36,14 +38,10 @@ def release_config() -> ReleaseConfig:
 
 @pytest.fixture(scope="session")
 def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> Iterable[Graph]:
+    oxigraph_config_parsed = oxigraph_config.parse()
+    assert oxigraph_config_parsed.directory_path
     oxigraph_dir_path = (
-        oxigraph_config.parse(
-            directory_path_default=Path(__file__).parent.parent.parent
-            / "data"
-            / "oxigraph"
-        ).directory_path
-        / "agrovoc"
-        / release.version.isoformat()
+        oxigraph_config_parsed.directory_path / "agrovoc" / release.version.isoformat()
     )
 
     if oxigraph_dir_path.is_dir():
