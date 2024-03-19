@@ -11,10 +11,10 @@ from agrovoc.models.release_graph import ReleaseGraph
 def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
     logger = get_dagster_logger()
 
-    oxigraph_config_parsed = rdf_store_config.parse()
-    assert oxigraph_config_parsed.directory_path
+    rdf_store_config_parsed = rdf_store_config.parse()
+    assert rdf_store_config_parsed.directory_path
     oxigraph_directory_path = (
-        oxigraph_config_parsed.directory_path / "agrovoc" / release.version.isoformat()
+        rdf_store_config_parsed.directory_path / "agrovoc" / release.version.isoformat()
     )
 
     if oxigraph_directory_path.is_dir():
