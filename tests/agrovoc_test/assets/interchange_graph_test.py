@@ -1,7 +1,7 @@
-from agrovoc.assets.interchange_graph import interchange_graph
 from graphs2go.models import interchange
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 
+from agrovoc.assets.interchange_graph import interchange_graph
 from agrovoc.models.release_graph import ReleaseGraph
 
 

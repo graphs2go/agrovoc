@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from rdflib import ConjunctiveGraph, Graph
 from graphs2go.rdf_stores.rdf_store import RdfStore
+from rdflib import ConjunctiveGraph, Graph
 
 from agrovoc.models.release import Release
 

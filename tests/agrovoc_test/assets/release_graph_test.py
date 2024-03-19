@@ -1,8 +1,8 @@
 import pytest
-from agrovoc.assets.release_graph import release_graph
-from agrovoc.models.release import Release
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 
+from agrovoc.assets.release_graph import release_graph
+from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
 
 

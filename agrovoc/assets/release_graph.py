@@ -1,12 +1,12 @@
 from dagster import asset, get_dagster_logger
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.rdf_stores.oxigraph_rdf_store import OxigraphRdfStore
 from graphs2go.rdf_stores.rdf_store import RdfStore
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from rdflib import URIRef
 
-from agrovoc.releases_partitions_definition import releases_partitions_definition
 from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
+from agrovoc.releases_partitions_definition import releases_partitions_definition
 
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)

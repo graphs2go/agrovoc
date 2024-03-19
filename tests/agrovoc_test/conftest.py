@@ -1,17 +1,18 @@
-from collections.abc import Iterable
 import logging
+from collections.abc import Iterable
 from pathlib import Path
+
 import pytest
 from graphs2go.models import interchange
-from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
+from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
 from rdflib import Graph
 
-from agrovoc.assets.release_graph import release_graph as release_graph_asset
 from agrovoc.assets.interchange_graph import (
     interchange_graph as interchange_graph_asset,
 )
+from agrovoc.assets.release_graph import release_graph as release_graph_asset
 from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.models.thesaurus import Thesaurus

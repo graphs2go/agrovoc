@@ -1,15 +1,15 @@
 from dagster import asset, get_dagster_logger
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.models import interchange
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from rdflib import URIRef
 from tqdm import tqdm
 
-from agrovoc.transform_thesaurus_to_interchange_models import (
-    transform_thesaurus_to_interchange_models,
-)
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.releases_partitions_definition import releases_partitions_definition
+from agrovoc.transform_thesaurus_to_interchange_models import (
+    transform_thesaurus_to_interchange_models,
+)
 
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)
