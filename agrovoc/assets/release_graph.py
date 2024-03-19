@@ -1,5 +1,4 @@
 from dagster import asset, get_dagster_logger
-from graphs2go.rdf_stores.oxigraph_rdf_store import OxigraphRdfStore
 from graphs2go.rdf_stores.rdf_store import RdfStore
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from rdflib import URIRef
