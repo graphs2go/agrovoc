@@ -20,7 +20,10 @@ def interchange_graph(
 
     with interchange.Graph.create(
         rdf_store_config=rdf_store_config,
-        identifier=URIRef("http://aims.fao.org/aos/agrovoc/"),
+        identifier=URIRef(
+            "urn:interchange:agrovoc-release:"
+            + release_graph.release.version.isoformat()
+        ),
     ) as interchange_graph:
         if not interchange_graph.is_empty:
             logger.info("interchange graph is not empty, skipping load")

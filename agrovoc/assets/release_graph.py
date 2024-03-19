@@ -14,7 +14,7 @@ def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> Release
     logger = get_dagster_logger()
 
     with RdfStore.create(
-        identifier=URIRef("urn:agrovoc_release:" + release.version.isoformat()),
+        identifier=URIRef("urn:agrovoc-release:" + release.version.isoformat()),
         rdf_store_config=rdf_store_config,
     ) as rdf_store:
         if rdf_store.is_empty:

@@ -21,5 +21,5 @@ class ReleaseGraph:
         """
 
         return ConjunctiveGraph(
-            RdfStore.open(self.rdf_store_descriptor).to_rdflib_store()
+            store=RdfStore.open(self.rdf_store_descriptor).rdflib_store
         )
