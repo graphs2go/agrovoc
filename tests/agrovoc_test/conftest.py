@@ -1,11 +1,13 @@
 from collections.abc import Iterable
 import logging
 from pathlib import Path
+import oxrdflib
+import pyoxigraph
 import pytest
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.resources.oxigraph_config import OxigraphConfig
 from graphs2go.utils.load_dotenv import load_dotenv
-from rdflib import Graph
+from rdflib import ConjunctiveGraph, Graph
 
 from agrovoc.models.release import Release
 from agrovoc.models.thesaurus import Thesaurus
@@ -34,9 +36,6 @@ def release_config() -> ReleaseConfig:
 
 @pytest.fixture(scope="session")
 def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> Iterable[Graph]:
-    import oxrdflib  # noqa: F401
-
-    graph = Graph(store="Oxigraph")
     oxigraph_dir_path = (
         oxigraph_config.parse(
             directory_path_default=Path(__file__).parent.parent.parent
@@ -46,30 +45,27 @@ def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> Iterable
         / "agrovoc"
         / release.version.isoformat()
     )
-    oxigraph_dir_path.mkdir(parents=True, exist_ok=True)
-    graph.open(str(oxigraph_dir_path))
+
+    if oxigraph_dir_path.is_dir():
+        logger.info("reusing existing Oxigraph %s", oxigraph_dir_path)
+        store = pyoxigraph.Store(oxigraph_dir_path)
+    else:
+        oxigraph_dir_path.mkdir(parents=True, exist_ok=True)
+        store = pyoxigraph.Store(oxigraph_dir_path)
+        logger.info(
+            "building %s Oxigraph from %s", oxigraph_dir_path, release.nt_file_path
+        )
+        # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
+        store.bulk_load(release.nt_file_path, mime_type="application/n-triples")
+        logger.info(
+            "built %s Oxigraph from %s",
+            oxigraph_dir_path,
+            release.nt_file_path,
+        )
+
+    graph = ConjunctiveGraph(store=oxrdflib.OxigraphStore(store=store))
     try:
-        if len(graph) > 0:
-            logger.info(
-                "reuising existing Oxigraph %s with %d triples",
-                oxigraph_dir_path,
-                len(graph),
-            )
-        else:
-            logger.info(
-                "building %s Oxigraph from %s", oxigraph_dir_path, release.nt_file_path
-            )
-            graph.parse(source=release.nt_file_path)
-            logger.info(
-                "built %s Oxigraph from %s with %d triples",
-                oxigraph_dir_path,
-                release.nt_file_path,
-                len(graph),
-            )
-
         yield graph
-
-        graph.close()
     finally:
         graph.close()
 

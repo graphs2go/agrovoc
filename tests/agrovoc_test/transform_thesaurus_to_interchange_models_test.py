@@ -10,7 +10,11 @@ from agrovoc.transform_thesaurus_to_interchange_models import (
 
 def test_transform(thesaurus: Thesaurus) -> None:
     actual_interchange_model_class_set: set[type[interchange.Model]] = set()
-    expected_interchange_model_class_set = {interchange.Concept, interchange.Label}
+    expected_interchange_model_class_set = {
+        interchange.Concept,
+        interchange.Label,
+        interchange.Relationship,
+    }
     interchange_graph = Graph()
     for interchange_model in transform_thesaurus_to_interchange_models(thesaurus):
         actual_interchange_model_class_set.add(interchange_model.__class__)
