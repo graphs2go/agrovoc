@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from graphs2go.models import interchange
 from graphs2go.utils.configure_markus import configure_markus
-from graphs2go.resources.oxigraph_config import OxigraphConfig
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.utils.load_dotenv import load_dotenv
 from rdflib import Graph
 
@@ -25,17 +25,17 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope="session")
 def interchange_graph(
-    oxigraph_config: OxigraphConfig, release_graph: ReleaseGraph
+    rdf_store_config: RdfStoreConfig, release_graph: ReleaseGraph
 ) -> interchange.Graph:
     descriptor: interchange.Graph.Descriptor = interchange_graph_asset(
-        oxigraph_config=oxigraph_config, release_graph=release_graph
+        rdf_store_config=rdf_store_config, release_graph=release_graph
     )  # type: ignore
     return interchange.Graph.open(descriptor=descriptor)
 
 
 @pytest.fixture(scope="session")
-def oxigraph_config() -> OxigraphConfig:
-    return OxigraphConfig.default(
+def rdf_store_config() -> RdfStoreConfig:
+    return RdfStoreConfig.default(
         directory_path_default=Path(__file__).parent.parent.parent / "data" / "oxigraph"
     )
 
@@ -51,8 +51,8 @@ def release_config() -> ReleaseConfig:
 
 
 @pytest.fixture(scope="session")
-def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> ReleaseGraph:
-    return release_graph_asset(oxigraph_config=oxigraph_config, release=release)  # type: ignore
+def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
+    return release_graph_asset(rdf_store_config=rdf_store_config, release=release)  # type: ignore
 
 
 @pytest.fixture(scope="session")

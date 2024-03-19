@@ -1,13 +1,13 @@
 import pytest
 from agrovoc.assets.release_graph import release_graph
 from agrovoc.models.release import Release
-from graphs2go.resources.oxigraph_config import OxigraphConfig
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 
 from agrovoc.models.release_graph import ReleaseGraph
 
 
-def test_asset(oxigraph_config: OxigraphConfig, release: Release) -> None:
-    asset = release_graph(oxigraph_config=oxigraph_config, release=release)
+def test_asset(rdf_store_config: RdfStoreConfig, release: Release) -> None:
+    asset = release_graph(rdf_store_config=rdf_store_config, release=release)
     assert isinstance(asset, ReleaseGraph)
     graph = asset.to_rdflib_graph()
     for _ in graph.triples((None, None, None)):

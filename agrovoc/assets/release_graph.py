@@ -1,5 +1,5 @@
 from dagster import asset, get_dagster_logger
-from graphs2go.resources.oxigraph_config import OxigraphConfig
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 import pyoxigraph
 
 from agrovoc.releases_partitions_definition import releases_partitions_definition
@@ -8,10 +8,10 @@ from agrovoc.models.release_graph import ReleaseGraph
 
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)
-def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> ReleaseGraph:
+def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
     logger = get_dagster_logger()
 
-    oxigraph_config_parsed = oxigraph_config.parse()
+    oxigraph_config_parsed = rdf_store_config.parse()
     assert oxigraph_config_parsed.directory_path
     oxigraph_directory_path = (
         oxigraph_config_parsed.directory_path / "agrovoc" / release.version.isoformat()

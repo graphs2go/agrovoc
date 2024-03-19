@@ -1,5 +1,5 @@
 from dagster import asset, get_dagster_logger
-from graphs2go.resources.oxigraph_config import OxigraphConfig
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.models import interchange
 from rdflib import URIRef
 from tqdm import tqdm
@@ -14,12 +14,12 @@ from agrovoc.releases_partitions_definition import releases_partitions_definitio
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)
 def interchange_graph(
-    oxigraph_config: OxigraphConfig, release_graph: ReleaseGraph
+    rdf_store_config: RdfStoreConfig, release_graph: ReleaseGraph
 ) -> interchange.Graph.Descriptor:
     logger = get_dagster_logger()
 
     with interchange.Graph.create(
-        oxigraph_config=oxigraph_config,
+        rdf_store_config=rdf_store_config,
         identifier=URIRef("http://aims.fao.org/aos/agrovoc/"),
     ) as interchange_graph:
         if not interchange_graph.is_empty:
