@@ -18,15 +18,13 @@ def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> Release
         rdf_store_config=rdf_store_config,
     ) as rdf_store:
         if rdf_store.is_empty:
-            if not isinstance(rdf_store, OxigraphRdfStore):
-                raise NotImplementedError
             logger.info(
                 "building Oxigraph from %s",
                 release.nt_file_path,
             )
             # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
-            rdf_store.pyoxigraph_store.bulk_load(
-                release.nt_file_path, mime_type="application/n-triples"
+            rdf_store.bulk_load(
+                source=release.nt_file_path, mime_type="application/n-triples"
             )
             logger.info(
                 "built Oxigraph from %s",
