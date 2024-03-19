@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from graphs2go.models.rdf_model import RdfModel
+from graphs2go.models import rdf
 from rdflib import DCTERMS, RDF, Literal, URIRef
 
 
-class Definition(RdfModel):
+class Definition(rdf.Model):
     @property
     def created(self) -> datetime:
         return self._required_value(DCTERMS.created, self._map_term_to_datetime)
