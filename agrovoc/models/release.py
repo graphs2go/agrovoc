@@ -7,6 +7,10 @@ from pathlib import Path
 
 
 class Release:
+    """
+    Picklable descriptor of an AGROVOC release.
+    """
+
     def __init__(self, file_path: Path):
         file_stem, file_ext = os.path.splitext(file_path.name.lower())
         if not file_stem.startswith("agrovoc_"):

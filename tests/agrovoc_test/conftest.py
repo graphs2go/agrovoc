@@ -9,7 +9,9 @@ from graphs2go.resources.oxigraph_config import OxigraphConfig
 from graphs2go.utils.load_dotenv import load_dotenv
 from rdflib import ConjunctiveGraph, Graph
 
+from agrovoc.assets.release_graph import release_graph as release_graph_asset
 from agrovoc.models.release import Release
+from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.resources.release_config import ReleaseConfig
 from agrovoc.utils.find_releases import find_releases
@@ -38,30 +40,10 @@ def release_config() -> ReleaseConfig:
 
 @pytest.fixture(scope="session")
 def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> Iterable[Graph]:
-    oxigraph_config_parsed = oxigraph_config.parse()
-    assert oxigraph_config_parsed.directory_path
-    oxigraph_dir_path = (
-        oxigraph_config_parsed.directory_path / "agrovoc" / release.version.isoformat()
-    )
+    graph: Graph = (
+        release_graph_asset(oxigraph_config=oxigraph_config, release=release)
+    ).to_rdflib_graph()  # type: ignore
 
-    if oxigraph_dir_path.is_dir():
-        logger.info("reusing existing Oxigraph %s", oxigraph_dir_path)
-        store = pyoxigraph.Store(oxigraph_dir_path)
-    else:
-        oxigraph_dir_path.mkdir(parents=True, exist_ok=True)
-        store = pyoxigraph.Store(oxigraph_dir_path)
-        logger.info(
-            "building %s Oxigraph from %s", oxigraph_dir_path, release.nt_file_path
-        )
-        # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
-        store.bulk_load(release.nt_file_path, mime_type="application/n-triples")
-        logger.info(
-            "built %s Oxigraph from %s",
-            oxigraph_dir_path,
-            release.nt_file_path,
-        )
-
-    graph = ConjunctiveGraph(store=oxrdflib.OxigraphStore(store=store))
     try:
         yield graph
     finally:
