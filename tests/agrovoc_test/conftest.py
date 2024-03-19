@@ -51,15 +51,8 @@ def release_config() -> ReleaseConfig:
 
 
 @pytest.fixture(scope="session")
-def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> Iterable[Graph]:
-    graph: Graph = (
-        release_graph_asset(oxigraph_config=oxigraph_config, release=release)
-    ).to_rdflib_graph()  # type: ignore
-
-    try:
-        yield graph
-    finally:
-        graph.close()
+def release_graph(oxigraph_config: OxigraphConfig, release: Release) -> ReleaseGraph:
+    return release_graph_asset(oxigraph_config=oxigraph_config, release=release)  # type: ignore
 
 
 @pytest.fixture(scope="session")
