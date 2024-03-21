@@ -3,7 +3,7 @@ from graphs2go.models import interchange
 from rdflib import Graph
 
 from agrovoc.models.thesaurus import Thesaurus
-from agrovoc.transform_thesaurus_to_interchange_models import (
+from agrovoc.transformers.transform_thesaurus_to_interchange_models import (
     transform_thesaurus_to_interchange_models,
 )
 

@@ -7,7 +7,7 @@ from tqdm import tqdm
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.releases_partitions_definition import releases_partitions_definition
-from agrovoc.transform_thesaurus_to_interchange_models import (
+from agrovoc.transformers.transform_thesaurus_to_interchange_models import (
     transform_thesaurus_to_interchange_models,
 )
 
