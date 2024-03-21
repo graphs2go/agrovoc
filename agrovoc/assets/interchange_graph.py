@@ -33,11 +33,12 @@ def interchange_graph(
 
         thesaurus = Thesaurus(graph=release_graph.to_rdflib_graph())
 
-        for model in tqdm(
-            transform_thesaurus_to_interchange_models(thesaurus=thesaurus),
-            desc="interchange models",
-        ):
-            interchange_graph.add(model)
+        interchange_graph.add_all(
+            tqdm(
+                transform_thesaurus_to_interchange_models(thesaurus=thesaurus),
+                desc="interchange models",
+            )
+        )
 
         logger.info("loaded interchange graph")
 
