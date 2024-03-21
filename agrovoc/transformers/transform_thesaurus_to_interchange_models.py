@@ -1,7 +1,6 @@
 from collections.abc import Iterable
 
 from graphs2go.models import interchange
-from graphs2go.namespaces.skosxl import SKOSXL
 from rdflib import SKOS, URIRef
 
 from agrovoc.models.concept import Concept
