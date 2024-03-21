@@ -15,16 +15,16 @@ def transform_thesaurus_to_interchange_models(
     for concept in thesaurus.concepts:
         yield interchange.Concept.builder(uri=concept.uri).build()
 
-        for labels, predicate in (
-            (concept.alt_label, SKOSXL.altLabel),
-            (concept.pref_label, SKOSXL.prefLabel),
+        for labels, label_type in (
+            (concept.alt_label, interchange.Label.Type.ALTERNATIVE),
+            (concept.pref_label, interchange.Label.Type.PREFERRED),
         ):
             for label in labels:
                 if isinstance(label, Label):
                     yield interchange.Label.builder(
                         literal_form=label.literal_form,
-                        predicate=predicate,
                         subject=concept.uri,
+                        type_=label_type,
                         uri=label.uri,
                     ).build()
                 else:
