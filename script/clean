@@ -4,5 +4,5 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+rm -fr data/oxigraph/urn*
 rm -fr history logs schedules storage
-
