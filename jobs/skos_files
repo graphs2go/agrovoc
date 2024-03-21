@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+export DAGSTER_HOME=$PWD
+poetry run dagster job backfill --all dummytext -j skos_files -m agrovoc --noprompt
