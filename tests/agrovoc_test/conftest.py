@@ -56,5 +56,5 @@ def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> Release
 
 
 @pytest.fixture(scope="session")
-def thesaurus(release_graph: Graph) -> Thesaurus:
-    return Thesaurus(graph=release_graph)
+def thesaurus(release_graph: ReleaseGraph) -> Thesaurus:
+    return Thesaurus(graph=release_graph.to_rdflib_graph())
