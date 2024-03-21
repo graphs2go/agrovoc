@@ -50,5 +50,3 @@ def transform_thesaurus_to_interchange_models(
                     ).build()
                 else:
                     raise TypeError(related_concept)
-
-        break

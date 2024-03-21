@@ -10,7 +10,7 @@ from agrovoc.assets.skos_graph import skos_graph
 from agrovoc.assets.interchange_graph import interchange_graph
 from agrovoc.assets.release import release
 from agrovoc.assets.release_graph import release_graph
-from agrovoc.jobs.skos_files import skos_files as skos_files_job
+from agrovoc.jobs.skos_files_job import skos_files_job
 from agrovoc.resources.release_config import ReleaseConfig
 
 configure_markus()
