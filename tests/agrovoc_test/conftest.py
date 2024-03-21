@@ -6,7 +6,6 @@ from graphs2go.models import interchange
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
-from rdflib import Graph
 
 from agrovoc.assets.interchange_graph import (
     interchange_graph as interchange_graph_asset,
