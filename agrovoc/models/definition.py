@@ -14,7 +14,7 @@ class Definition(rdf.Model):
         return self._optional_value(DCTERMS.modified, self._map_term_to_datetime)
 
     @classmethod
-    def rdf_type_uri(cls) -> URIRef:
+    def primary_rdf_type(cls) -> URIRef:
         raise NotImplementedError
 
     @property
