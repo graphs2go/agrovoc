@@ -12,7 +12,9 @@ def transform_thesaurus_to_interchange_models(
     thesaurus: Thesaurus,
 ) -> Iterable[interchange.Model]:
     for concept in thesaurus.concepts:
-        yield interchange.Concept.builder(uri=concept.uri).build()
+        yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
+            SKOS.Concept
+        ).build()
 
         for labels, label_type in (
             (concept.alt_label, interchange.Label.Type.ALTERNATIVE),
