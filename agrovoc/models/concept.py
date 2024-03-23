@@ -14,10 +14,3 @@ class Concept(skos.Concept):
     def definition(self) -> Iterable[Definition]:
         for uri in self._values(SKOS.definition, self._map_term_to_uri):
             yield Definition(resource=self.resource.graph.resource(uri))
-
-    # @property
-    # def is_part_of_subvocabulary(self) -> Iterable[Literal]:
-    #     return self._values(
-    #         AGRONTOLOGY.isPartOfSubvocabulary,
-    #         self._map_term_to_literal,
-    #     )

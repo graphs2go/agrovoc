@@ -9,18 +9,14 @@ from agrovoc.models.thesaurus import Thesaurus
 
 
 def __transform_labels(model: skos.LabeledModel) -> Iterable[interchange.Model]:
-    for labels, label_type in (
-        (model.alt_label, interchange.Label.Type.ALTERNATIVE),
-        (model.pref_label, interchange.Label.Type.PREFERRED),
-    ):
-        for label in labels:
-            assert isinstance(label, Label)
-            yield interchange.Label.builder(
-                literal_form=label.literal_form,
-                subject=model,
-                type_=label_type,
-                uri=label.uri,
-            ).set_created(label.created).set_modified(label.modified).build()
+    for label_type, label in model.lexical_labels:
+        assert isinstance(label, Label)
+        yield interchange.Label.builder(
+            literal_form=label.literal_form,
+            subject=model,
+            type_=label_type,
+            uri=label.uri,
+        ).set_created(label.created).set_modified(label.modified).build()
 
 
 def transform_thesaurus_to_interchange_models(
@@ -42,21 +38,15 @@ def transform_thesaurus_to_interchange_models(
             object_=concept_scheme, predicate=SKOS.inScheme, subject=concept
         ).build()
 
-        for related_concepts, predicate in (
-            (concept.broader, SKOS.broader),
-            (concept.close_match, SKOS.closeMatch),
-            (concept.exact_match, SKOS.exactMatch),
-            (concept.related, SKOS.related),
-        ):
-            for related_concept in related_concepts:
-                relationship_builder = interchange.Relationship.builder(
-                    object_=related_concept,
-                    predicate=predicate,
-                    subject=concept.uri,
+        for semantic_relation_predicate, related_concept in concept.semantic_relations:
+            relationship_builder = interchange.Relationship.builder(
+                object_=related_concept,
+                predicate=semantic_relation_predicate,
+                subject=concept,
+            )
+            if isinstance(related_concept, Concept):
+                relationship_builder.set_created(related_concept.created).set_modified(
+                    related_concept.modified
                 )
-                if isinstance(related_concept, Concept):
-                    relationship_builder.set_created(
-                        related_concept.created
-                    ).set_modified(related_concept.modified)
-                yield relationship_builder.build()
+            yield relationship_builder.build()
         break
