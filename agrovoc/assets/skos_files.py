@@ -1,5 +1,0 @@
-from graphs2go.assets.build_skos_files_asset import build_skos_files_asset
-
-from agrovoc.releases_partitions_definition import releases_partitions_definition
-
-skos_files = build_skos_files_asset(partitions_def=releases_partitions_definition)

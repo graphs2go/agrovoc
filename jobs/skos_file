@@ -5,6 +5,6 @@ set -e
 cd "$(dirname "$0")/.."
 
 export DAGSTER_HOME=$PWD
-poetry run dagster job backfill --all dummytext -j skos_files_job -m agrovoc --noprompt
+poetry run dagster job backfill --all dummytext -j skos_file_job -m agrovoc --noprompt
 
 tail -f /dev/null

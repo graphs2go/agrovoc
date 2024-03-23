@@ -5,12 +5,12 @@ from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
 
-from agrovoc.assets.skos_files import skos_files
+from agrovoc.assets.skos_file import skos_file
 from agrovoc.assets.skos_graph import skos_graph
 from agrovoc.assets.interchange_graph import interchange_graph
 from agrovoc.assets.release import release
 from agrovoc.assets.release_graph import release_graph
-from agrovoc.jobs.skos_files_job import skos_files_job
+from agrovoc.jobs.skos_file_job import skos_file_job
 from agrovoc.resources.release_config import ReleaseConfig
 
 configure_markus()
@@ -22,10 +22,10 @@ definitions = Definitions(
         interchange_graph,
         release,
         release_graph,
-        skos_files,
+        skos_file,
         skos_graph,
     ],
-    jobs=[skos_files_job],
+    jobs=[skos_file_job],
     resources={
         "output_config": OutputConfig.from_env_vars(
             directory_path_default=Path(__file__).parent.parent / "data" / "output"
