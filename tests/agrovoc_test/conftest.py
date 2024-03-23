@@ -1,5 +1,5 @@
-from collections.abc import Iterable
 import logging
+from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
@@ -11,8 +11,8 @@ from graphs2go.utils.load_dotenv import load_dotenv
 from agrovoc.assets.interchange_graph import (
     interchange_graph as interchange_graph_asset,
 )
-from agrovoc.assets.skos_graph import skos_graph as skos_graph_asset
 from agrovoc.assets.release_graph import release_graph as release_graph_asset
+from agrovoc.assets.skos_graph import skos_graph as skos_graph_asset
 from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.models.thesaurus import Thesaurus
