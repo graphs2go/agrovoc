@@ -14,7 +14,7 @@ def transform_thesaurus_to_interchange_models(
     for concept in thesaurus.concepts:
         yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
             SKOS.Concept
-        ).build()
+        ).set_created(concept.created).set_modified(concept.modified).build()
 
         for labels, label_type in (
             (concept.alt_label, interchange.Label.Type.ALTERNATIVE),
@@ -27,7 +27,7 @@ def transform_thesaurus_to_interchange_models(
                         subject=concept.uri,
                         type_=label_type,
                         uri=label.uri,
-                    ).build()
+                    ).set_created(label.created).set_modified(label.modified).build()
                 else:
                     raise TypeError(label)
 
