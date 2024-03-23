@@ -20,7 +20,5 @@ def test_transform(thesaurus: Thesaurus) -> None:
         actual_interchange_model_class_set.add(interchange_model.__class__)
         interchange_graph += interchange_model.resource.graph
         if expected_interchange_model_class_set == actual_interchange_model_class_set:
-            interchange_graph_ttl = interchange_graph.serialize(format="ttl")
-            print(interchange_graph_ttl)
             return
     pytest.fail()
