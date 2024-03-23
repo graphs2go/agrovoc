@@ -1,8 +1,7 @@
 from collections.abc import Iterable
-from datetime import datetime
 
 from graphs2go.models import skos
-from rdflib import DCTERMS, SKOS
+from rdflib import SKOS
 
 from agrovoc.models.definition import Definition
 from agrovoc.models.label import Label
