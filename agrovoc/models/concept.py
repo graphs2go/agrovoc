@@ -12,10 +12,6 @@ class Concept(skos.Concept):
     _LABEL_CLASS = Label
 
     @property
-    def created(self) -> datetime:
-        return self._required_value(DCTERMS.created, self._map_term_to_datetime)
-
-    @property
     def definition(self) -> Iterable[Definition]:
         for uri in self._values(SKOS.definition, self._map_term_to_uri):
             yield Definition(resource=self.resource.graph.resource(uri))
@@ -26,7 +22,3 @@ class Concept(skos.Concept):
     #         AGRONTOLOGY.isPartOfSubvocabulary,
     #         self._map_term_to_literal,
     #     )
-
-    @property
-    def modified(self) -> datetime | None:
-        return self._optional_value(DCTERMS.modified, self._map_term_to_datetime)
