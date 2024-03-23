@@ -1,0 +1,7 @@
+from graphs2go.assets.build_interchange_file_asset import build_interchange_file_asset
+
+from agrovoc.releases_partitions_definition import releases_partitions_definition
+
+interchange_file = build_interchange_file_asset(
+    partitions_def=releases_partitions_definition
+)

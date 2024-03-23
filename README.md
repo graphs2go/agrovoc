@@ -35,9 +35,9 @@ or similar, depending on the release date.
 
 The code includes multiple [Dagster](https://dagster.io/) pipelines. Each pipeline (a Dagster "job") has a corresponding shell script in `jobs/`.
 
-For example, to transform the AGROVOC thesaurus into SHACL and SKOS representations and serialize them as Turtle (`.ttl`) files in `data/output`, run:
+For example, to transform the AGROVOC thesaurus into multiple representations and serialize them as files in `data/output`, run:
 
-    jobs/skos
+    jobs/files
 
 ## Structure of this project
 
