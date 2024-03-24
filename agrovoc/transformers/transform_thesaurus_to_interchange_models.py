@@ -32,12 +32,28 @@ def transform_thesaurus_to_interchange_models(
         yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
             SKOS.Concept
         ).set_created(concept.created).set_modified(concept.modified).build()
+
         yield from __transform_labels(concept)
 
+        # concept, skos:inScheme, concept scheme
         yield interchange.Relationship.builder(
             object_=concept_scheme, predicate=SKOS.inScheme, subject=concept
         ).build()
 
+        # Handle skos:definition specially since it's a subgraph and not a literal
+        for definition in concept.definitions:
+            yield interchange.Property.builder(
+                object_=definition.value,
+                predicate=SKOS.definition,
+                subject=concept,
+                uri=definition.uri,
+            ).set_created(definition.created).set_modified(
+                definition.modified
+            ).set_source(
+                definition.source
+            ).build()
+
+        # All skos:semanticRelation sub-properties
         for semantic_relation_predicate, related_concept in concept.semantic_relations:
             relationship_builder = interchange.Relationship.builder(
                 object_=related_concept,
