@@ -14,6 +14,7 @@ def test_transform(thesaurus: Thesaurus) -> None:
         interchange.Label,
         interchange.Node,
         interchange.Relationship,
+        interchange.Property,
     }
     interchange_graph = Graph()
     for interchange_model in transform_thesaurus_to_interchange_models(thesaurus):
@@ -21,4 +22,4 @@ def test_transform(thesaurus: Thesaurus) -> None:
         interchange_graph += interchange_model.resource.graph
         if expected_interchange_model_class_set == actual_interchange_model_class_set:
             return
-    pytest.fail()
+    pytest.fail("not all interchange models represented")
