@@ -28,27 +28,30 @@ def transform_thesaurus_to_interchange_models(
     ).set_modified(concept_scheme.modified).build()
     yield from __transform_labels(concept_scheme)
 
-    represented_interchange_model_classes: set[type[interchange.Model]] = set()
+    transformed_definition = False
+    transformed_notation = False
+    transformed_note = False
+    transformed_semantic_relation = False
 
     for concept in thesaurus.concepts:
         yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
             SKOS.Concept
         ).set_created(concept.created).set_modified(concept.modified).build()
-        represented_interchange_model_classes.add(interchange.Node)
 
         yield from __transform_labels(concept)
-        represented_interchange_model_classes.add(interchange.Label)
 
         # concept, skos:inScheme, concept scheme
         yield interchange.Relationship.builder(
             object_=concept_scheme, predicate=SKOS.inScheme, subject=concept
         ).build()
-        represented_interchange_model_classes.add(interchange.Relationship)
 
         # Handle skos:definition specially since it's a subgraph and not a literal
         for definition in concept.definitions:
+            definition_value = definition.value
+            if definition_value is None:
+                continue
             yield interchange.Property.builder(
-                object_=definition.value,
+                object_=definition_value,
                 predicate=SKOS.definition,
                 subject=concept,
                 uri=definition.uri,
@@ -57,13 +60,21 @@ def transform_thesaurus_to_interchange_models(
             ).set_source(
                 definition.source
             ).build()
-            represented_interchange_model_classes.add(interchange.Property)
+            transformed_definition = True
+
+        # skos:notation statements
+        for notation in concept.notations:
+            yield interchange.Property.builder(
+                object_=notation, predicate=SKOS.notation, subject=concept
+            ).build()
+            transformed_notation = True
 
         # All skos:note sub-properties
         for note_predicate, note in concept.notes:
             yield interchange.Property.builder(
                 object_=note, predicate=note_predicate, subject=concept
             ).build()
+            transformed_note = True
 
         # All skos:semanticRelation sub-properties
         for semantic_relation_predicate, related_concept in concept.semantic_relations:
@@ -77,7 +88,13 @@ def transform_thesaurus_to_interchange_models(
                     related_concept.modified
                 )
             yield relationship_builder.build()
+            transformed_semantic_relation = True
 
-        if len(represented_interchange_model_classes) == 4:
+        if (
+            transformed_definition
+            and transformed_notation
+            and transformed_note
+            and transformed_semantic_relation
+        ):
             # Only sample the graph while we're developing
             break
