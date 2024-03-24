@@ -28,11 +28,6 @@ def transform_thesaurus_to_interchange_models(
     ).set_modified(concept_scheme.modified).build()
     yield from __transform_labels(concept_scheme)
 
-    transformed_definition = False
-    transformed_notation = False
-    transformed_note = False
-    transformed_semantic_relation = False
-
     for concept in thesaurus.concepts:
         yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
             SKOS.Concept
@@ -60,21 +55,18 @@ def transform_thesaurus_to_interchange_models(
             ).set_source(
                 definition.source
             ).build()
-            transformed_definition = True
 
         # skos:notation statements
         for notation in concept.notations:
             yield interchange.Property.builder(
                 object_=notation, predicate=SKOS.notation, subject=concept
             ).build()
-            transformed_notation = True
 
         # All skos:note sub-properties
         for note_predicate, note in concept.notes:
             yield interchange.Property.builder(
                 object_=note, predicate=note_predicate, subject=concept
             ).build()
-            transformed_note = True
 
         # All skos:semanticRelation sub-properties
         for semantic_relation_predicate, related_concept in concept.semantic_relations:
@@ -88,13 +80,3 @@ def transform_thesaurus_to_interchange_models(
                     related_concept.modified
                 )
             yield relationship_builder.build()
-            transformed_semantic_relation = True
-
-        if (
-            transformed_definition
-            and transformed_notation
-            and transformed_note
-            and transformed_semantic_relation
-        ):
-            # Only sample the graph while we're developing
-            break
