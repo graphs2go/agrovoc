@@ -36,7 +36,7 @@ def interchange_graph(
         interchange_graph.add_all(
             tqdm(
                 transform_thesaurus_to_interchange_models(thesaurus=thesaurus),
-                desc="interchange models",
+                desc="interchange graph models",
             )
         )
 
