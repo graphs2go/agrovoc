@@ -59,6 +59,12 @@ def transform_thesaurus_to_interchange_models(
             ).build()
             represented_interchange_model_classes.add(interchange.Property)
 
+        # All skos:note sub-properties
+        for note_predicate, note in concept.notes:
+            yield interchange.Property.builder(
+                object_=note, predicate=note_predicate, subject=concept
+            ).build()
+
         # All skos:semanticRelation sub-properties
         for semantic_relation_predicate, related_concept in concept.semantic_relations:
             relationship_builder = interchange.Relationship.builder(
