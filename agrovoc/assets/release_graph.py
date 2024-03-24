@@ -21,8 +21,7 @@ def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> Release
                 "building RDF store from %s",
                 release.nt_file_path,
             )
-            # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
-            rdf_store.bulk_load(
+            rdf_store.load(
                 source=release.nt_file_path, mime_type="application/n-triples"
             )
             logger.info(
