@@ -29,8 +29,8 @@ def transform_thesaurus_to_interchange_models(
     yield from __transform_labels(concept_scheme)
 
     for concept_i, concept in enumerate(thesaurus.concepts):
-        if concept_i == 100:
-            break
+        # if concept_i == 100:
+        #     break
 
         yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
             SKOS.Concept

@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 from graphs2go.models import interchange, skos
+from graphs2go.resources.output_config import OutputConfig
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
@@ -41,6 +42,11 @@ def interchange_graph_descriptor(
     return interchange_graph_asset(
         rdf_store_config=rdf_store_config, release_graph=release_graph
     )  # type: ignore
+
+
+@pytest.fixture()
+def output_config(tmp_path: Path) -> OutputConfig:
+    return OutputConfig(directory_path=str(tmp_path))
 
 
 @pytest.fixture(scope="session")

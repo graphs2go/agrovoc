@@ -4,6 +4,6 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-rm -fr data/output/interchange data/output/skos
+rm -fr data/output/cypher data/output/interchange data/output/skos
 rm -fr data/oxigraph/urn*
 rm -fr history logs schedules storage
