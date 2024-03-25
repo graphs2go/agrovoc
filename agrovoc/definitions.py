@@ -1,13 +1,12 @@
 from pathlib import Path
 
 from dagster import Definitions
-
-from agrovoc.assets.cypher_files import cypher_files
 from graphs2go.resources.output_config import OutputConfig
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
 
+from agrovoc.assets.cypher_files import cypher_files
 from agrovoc.assets.interchange_file import interchange_file
 from agrovoc.assets.interchange_graph import interchange_graph
 from agrovoc.assets.release import release
