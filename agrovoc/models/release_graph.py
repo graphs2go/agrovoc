@@ -20,6 +20,4 @@ class ReleaseGraph:
         Get an rdflib Graph for this release graph.
         """
 
-        return ConjunctiveGraph(
-            store=RdfStore.open(self.rdf_store_descriptor).rdflib_store
-        )
+        return ConjunctiveGraph(store=RdfStore.open_(self.rdf_store_descriptor))

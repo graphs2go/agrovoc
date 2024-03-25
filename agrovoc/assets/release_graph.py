@@ -12,7 +12,7 @@ from agrovoc.releases_partitions_definition import releases_partitions_definitio
 def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
     logger = get_dagster_logger()
 
-    with RdfStore.create(
+    with RdfStore.create_(
         identifier=URIRef("urn:agrovoc-release:" + release.version.isoformat()),
         rdf_store_config=rdf_store_config,
     ) as rdf_store:
@@ -21,8 +21,7 @@ def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> Release
                 "building RDF store from %s",
                 release.nt_file_path,
             )
-            # Use the underlying pyoxigraph bulk_load instead of going through rdflib, which is much slower
-            rdf_store.bulk_load(
+            rdf_store.load(
                 source=release.nt_file_path, mime_type="application/n-triples"
             )
             logger.info(
