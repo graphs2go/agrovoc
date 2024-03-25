@@ -28,7 +28,10 @@ def transform_thesaurus_to_interchange_models(
     ).set_modified(concept_scheme.modified).build()
     yield from __transform_labels(concept_scheme)
 
-    for concept in thesaurus.concepts:
+    for concept_i, concept in enumerate(thesaurus.concepts):
+        if concept_i == 100:
+            break
+
         yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
             SKOS.Concept
         ).set_created(concept.created).set_modified(concept.modified).build()
