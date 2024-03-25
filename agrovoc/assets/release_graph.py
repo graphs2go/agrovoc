@@ -12,7 +12,7 @@ from agrovoc.releases_partitions_definition import releases_partitions_definitio
 def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
     logger = get_dagster_logger()
 
-    with RdfStore.create(
+    with RdfStore.create_(
         identifier=URIRef("urn:agrovoc-release:" + release.version.isoformat()),
         rdf_store_config=rdf_store_config,
     ) as rdf_store:
