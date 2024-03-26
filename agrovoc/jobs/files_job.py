@@ -8,7 +8,7 @@ files_job = define_asset_job(
     "files_job",
     selection=[
         "*" + cypher_files_asset.key.path[0],
-        "*" + interchange_file_asset.key.path[0],
-        "*" + skos_file_asset.key.path[0],
+        # "*" + interchange_file_asset.key.path[0],
+        # "*" + skos_file_asset.key.path[0],
     ],
 )
