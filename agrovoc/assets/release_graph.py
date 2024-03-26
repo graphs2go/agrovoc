@@ -9,11 +9,13 @@ from agrovoc.releases_partitions_definition import releases_partitions_definitio
 
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)
-def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
+def release_graph(
+    rdf_store_config: RdfStoreConfig, release: Release
+) -> ReleaseGraph.Descriptor:
     logger = get_dagster_logger()
 
     with RdfStore.create_(
-        identifier=URIRef("urn:agrovoc-release:" + release.version.isoformat()),
+        identifier=release.identifier,
         rdf_store_config=rdf_store_config,
     ) as rdf_store:
         if rdf_store.is_empty:
@@ -31,4 +33,7 @@ def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> Release
         else:
             logger.info("reusing existing RDF store")
 
-        return ReleaseGraph(rdf_store_descriptor=rdf_store.descriptor, release=release)
+        return ReleaseGraph.Descriptor(
+            identifier=release.identifier,
+            rdf_store_descriptor=rdf_store.descriptor,
+        )

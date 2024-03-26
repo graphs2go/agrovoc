@@ -5,6 +5,8 @@ from base64 import b64decode, b64encode
 from datetime import date
 from pathlib import Path
 
+from rdflib import URIRef
+
 
 class Release:
     """
@@ -29,6 +31,10 @@ class Release:
     @classmethod
     def from_partition_key(cls, partition_key: str) -> Release:
         return Release(Path(b64decode(partition_key).decode("utf-8")))
+
+    @property
+    def identifier(self) -> URIRef:
+        return URIRef("urn:agrovoc-release:" + self.version.isoformat())
 
     @property
     def nt_file_path(self) -> Path:
