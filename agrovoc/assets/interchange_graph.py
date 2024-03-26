@@ -1,10 +1,6 @@
 from urllib.parse import quote
 
 from dagster import asset, get_dagster_logger
-
-from agrovoc.transformers.transform_release_graph_to_interchange_models import (
-    transform_release_graph_to_interchange_models,
-)
 from graphs2go.models import interchange
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from rdflib import URIRef
@@ -12,6 +8,9 @@ from tqdm import tqdm
 
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.releases_partitions_definition import releases_partitions_definition
+from agrovoc.transformers.transform_release_graph_to_interchange_models import (
+    transform_release_graph_to_interchange_models,
+)
 
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)

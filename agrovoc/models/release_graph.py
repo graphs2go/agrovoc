@@ -1,10 +1,10 @@
 from collections.abc import Iterable
 
-from rdflib import URIRef, RDF, SKOS
+from graphs2go.models import rdf
+from rdflib import RDF, SKOS, URIRef
 
 from agrovoc.models.concept import Concept
 from agrovoc.models.concept_scheme import ConceptScheme
-from graphs2go.models import rdf
 
 
 class ReleaseGraph(rdf.Graph):

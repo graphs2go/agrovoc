@@ -1,13 +1,12 @@
 from collections.abc import Iterable
 
-from agrovoc.models.release_graph import ReleaseGraph
 from graphs2go.models import interchange, skos
+from graphs2go.transformers.parallel_transform import parallel_transform
 from rdflib import SKOS, URIRef
 
 from agrovoc.models.concept import Concept
 from agrovoc.models.label import Label
-from graphs2go.transformers.parallel_transform import parallel_transform
-
+from agrovoc.models.release_graph import ReleaseGraph
 
 _CONCEPT_BATCH_SIZE = 100
 
