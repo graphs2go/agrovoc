@@ -1,7 +1,6 @@
 from collections.abc import Iterable
 
 from graphs2go.models import interchange, skos
-from graphs2go.transformers.parallel_transform import parallel_transform
 from rdflib import SKOS, URIRef
 
 from agrovoc.models.concept import Concept
