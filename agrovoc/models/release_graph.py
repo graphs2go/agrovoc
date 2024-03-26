@@ -19,9 +19,11 @@ class ReleaseGraph(rdf.Graph):
 
     @property
     def concept_uris(self) -> Iterable[URIRef]:
-        yield from self.rdflib_graph.subjects(
+        for concept_uri in self.rdflib_graph.subjects(
             predicate=RDF.type, object=SKOS.Concept, unique=True
-        )
+        ):
+            assert isinstance(concept_uri, URIRef)
+            yield concept_uri
 
     @property
     def concept_scheme(self) -> ConceptScheme:
