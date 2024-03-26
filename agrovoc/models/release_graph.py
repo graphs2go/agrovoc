@@ -1,23 +1,34 @@
-from dataclasses import dataclass
+from collections.abc import Iterable
 
-from graphs2go.rdf_stores.rdf_store import RdfStore
-from rdflib import ConjunctiveGraph, Graph
+from graphs2go.models import rdf
+from rdflib import RDF, SKOS, URIRef
 
-from agrovoc.models.release import Release
+from agrovoc.models.concept import Concept
+from agrovoc.models.concept_scheme import ConceptScheme
 
 
-@dataclass(frozen=True)
-class ReleaseGraph:
-    """
-    Picklable descriptor of an rdflib.Graph containing an AGROVOC release.
-    """
+class ReleaseGraph(rdf.Graph):
+    def concept_by_uri(self, uri: URIRef) -> Concept:
+        # For performance reasons, don't check if it's actually a Concept
+        return Concept(resource=self.rdflib_graph.resource(uri))
 
-    rdf_store_descriptor: RdfStore.Descriptor
-    release: Release
+    @property
+    def concepts(self) -> Iterable[Concept]:
+        for concept_uri in self.concept_uris:
+            yield self.concept_by_uri(concept_uri)
 
-    def to_rdflib_graph(self) -> Graph:
-        """
-        Get an rdflib Graph for this release graph.
-        """
+    @property
+    def concept_uris(self) -> Iterable[URIRef]:
+        for concept_uri in self.rdflib_graph.subjects(
+            predicate=RDF.type, object=SKOS.Concept, unique=True
+        ):
+            assert isinstance(concept_uri, URIRef)
+            yield concept_uri
 
-        return ConjunctiveGraph(store=RdfStore.open_(self.rdf_store_descriptor))
+    @property
+    def concept_scheme(self) -> ConceptScheme:
+        for uri in self.rdflib_graph.subjects(
+            predicate=RDF.type, object=SKOS.ConceptScheme
+        ):
+            return ConceptScheme(resource=self.rdflib_graph.resource(uri))
+        raise ValueError("no skos:ConceptScheme found")

@@ -16,7 +16,6 @@ from agrovoc.assets.release_graph import release_graph as release_graph_asset
 from agrovoc.assets.skos_graph import skos_graph as skos_graph_asset
 from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
-from agrovoc.models.thesaurus import Thesaurus
 from agrovoc.resources.release_config import ReleaseConfig
 from agrovoc.utils.find_releases import find_releases
 
@@ -67,7 +66,19 @@ def release_config() -> ReleaseConfig:
 
 
 @pytest.fixture(scope="session")
-def release_graph(rdf_store_config: RdfStoreConfig, release: Release) -> ReleaseGraph:
+def release_graph(
+    release_graph_descriptor: ReleaseGraph.Descriptor,
+) -> Iterable[ReleaseGraph]:
+    with ReleaseGraph.open(
+        descriptor=release_graph_descriptor, read_only=True
+    ) as release_graph:
+        yield release_graph
+
+
+@pytest.fixture(scope="session")
+def release_graph_descriptor(
+    rdf_store_config: RdfStoreConfig, release: Release
+) -> ReleaseGraph.Descriptor:
     return release_graph_asset(rdf_store_config=rdf_store_config, release=release)  # type: ignore
 
 
@@ -80,8 +91,3 @@ def skos_graph_descriptor(
         interchange_graph=interchange_graph_descriptor,
         rdf_store_config=rdf_store_config,
     )  # type: ignore
-
-
-@pytest.fixture(scope="session")
-def thesaurus(release_graph: ReleaseGraph) -> Thesaurus:
-    return Thesaurus(graph=release_graph.to_rdflib_graph())
