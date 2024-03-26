@@ -1,5 +1,4 @@
 from collections.abc import Iterable
-from multiprocessing import Queue, JoinableQueue
 
 from agrovoc.models.release_graph import ReleaseGraph
 from graphs2go.models import interchange, skos
@@ -78,46 +77,46 @@ def __transform_concept(
         yield relationship_builder.build()
 
 
-def _transform_concept_consumer(
-    input_: tuple[URIRef, ReleaseGraph.Descriptor],
-    output_queue: Queue,
-    work_queue: JoinableQueue,
-) -> None:
-    (concept_scheme_uri, release_graph_descriptor) = input_
-
-    with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
-        while True:
-            concept_uris: tuple[URIRef, ...] | None = work_queue.get()
-
-            if concept_uris is None:
-                work_queue.task_done()
-                break  # Signal from the producer there's no more work
-
-            interchange_models: list[interchange.Model] = []  # type: ignore
-            for concept_uri in concept_uris:
-                interchange_models.extend(
-                    __transform_concept(
-                        concept_scheme_uri=concept_scheme_uri,
-                        concept=release_graph.concept_by_uri(concept_uri),
-                    )
-                )
-            output_queue.put(tuple(interchange_models))
-            work_queue.task_done()
-
-
-def _transform_concept_producer(
-    input_: ReleaseGraph.Descriptor, work_queue: JoinableQueue
-) -> None:
-    concept_uris_batch: list[URIRef] = []
-    with ReleaseGraph.open(input_, read_only=True) as release_graph:
-        for concept_uri in release_graph.concept_uris:
-            concept_uris_batch.append(concept_uri)
-            if len(concept_uris_batch) == _CONCEPT_BATCH_SIZE:
-                work_queue.put(tuple(concept_uris_batch))
-                concept_uris_batch = []
-
-    if concept_uris_batch:
-        work_queue.put(tuple(concept_uris_batch))
+# def _transform_concept_consumer(
+#     input_: tuple[URIRef, ReleaseGraph.Descriptor],
+#     output_queue: Queue,
+#     work_queue: JoinableQueue,
+# ) -> None:
+#     (concept_scheme_uri, release_graph_descriptor) = input_
+#
+#     with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
+#         while True:
+#             concept_uris: tuple[URIRef, ...] | None = work_queue.get()
+#
+#             if concept_uris is None:
+#                 work_queue.task_done()
+#                 break  # Signal from the producer there's no more work
+#
+#             interchange_models: list[interchange.Model] = []  # type: ignore
+#             for concept_uri in concept_uris:
+#                 interchange_models.extend(
+#                     __transform_concept(
+#                         concept_scheme_uri=concept_scheme_uri,
+#                         concept=release_graph.concept_by_uri(concept_uri),
+#                     )
+#                 )
+#             output_queue.put(tuple(interchange_models))
+#             work_queue.task_done()
+#
+#
+# def _transform_concept_producer(
+#     input_: ReleaseGraph.Descriptor, work_queue: JoinableQueue
+# ) -> None:
+#     concept_uris_batch: list[URIRef] = []
+#     with ReleaseGraph.open(input_, read_only=True) as release_graph:
+#         for concept_uri in release_graph.concept_uris:
+#             concept_uris_batch.append(concept_uri)
+#             if len(concept_uris_batch) == _CONCEPT_BATCH_SIZE:
+#                 work_queue.put(tuple(concept_uris_batch))
+#                 concept_uris_batch = []
+#
+#     if concept_uris_batch:
+#         work_queue.put(tuple(concept_uris_batch))
 
 
 def transform_release_graph_to_interchange_models(
@@ -130,9 +129,14 @@ def transform_release_graph_to_interchange_models(
         ).set_modified(concept_scheme.modified).build()
         yield from __transform_labels(concept_scheme)
 
-    yield from parallel_transform(
-        consumer=_transform_concept_consumer,
-        consumer_input=(concept_scheme.uri, release_graph_descriptor),
-        producer=_transform_concept_producer,
-        producer_input=release_graph_descriptor,
-    )
+        for concept in release_graph.concepts:
+            yield from __transform_concept(
+                concept=concept, concept_scheme_uri=concept_scheme.uri
+            )
+
+    # yield from parallel_transform(
+    #     consumer=_transform_concept_consumer,
+    #     consumer_input=(concept_scheme.uri, release_graph_descriptor),
+    #     producer=_transform_concept_producer,
+    #     producer_input=release_graph_descriptor,
+    # )
