@@ -1,8 +1,18 @@
 from urllib.parse import quote
 
-from dagster import AssetExecutionContext, StaticPartitionsDefinition
-from dagster import asset
-from dagster import get_dagster_logger
+from dagster import (
+    AssetExecutionContext,
+    StaticPartitionsDefinition,
+    asset,
+    get_dagster_logger,
+)
+from graphs2go.assets.build_cypher_files_asset import build_cypher_files_asset
+from graphs2go.assets.build_interchange_file_asset import build_interchange_file_asset
+from graphs2go.assets.build_skos_file_asset import build_skos_file_asset
+from graphs2go.assets.build_skos_graph_asset import build_skos_graph_asset
+from graphs2go.models import interchange, rdf
+from graphs2go.rdf_stores.rdf_store import RdfStore
+from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from rdflib import URIRef
 from tqdm import tqdm
 
@@ -11,15 +21,6 @@ from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.resources import ReleaseConfig
 from agrovoc.transform import transform
-from graphs2go.assets.build_cypher_files_asset import build_cypher_files_asset
-from graphs2go.assets.build_interchange_file_asset import build_interchange_file_asset
-from graphs2go.assets.build_skos_file_asset import build_skos_file_asset
-from graphs2go.assets.build_skos_graph_asset import build_skos_graph_asset
-from graphs2go.models import interchange
-from graphs2go.models import rdf
-from graphs2go.rdf_stores.rdf_store import RdfStore
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
-
 
 # Static partitions: scan the release directory once at startup
 releases_partitions_definition = StaticPartitionsDefinition(

@@ -3,8 +3,6 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-
-from agrovoc.find_releases import find_releases
 from graphs2go.models import interchange, skos
 from graphs2go.resources.output_config import OutputConfig
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
@@ -12,6 +10,7 @@ from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
 
 from agrovoc import assets
+from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
 from agrovoc.resources import ReleaseConfig
 

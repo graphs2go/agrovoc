@@ -1,6 +1,6 @@
 from dagster import define_asset_job
 
-from agrovoc.assets import skos_file, interchange_file, cypher_files
+from agrovoc.assets import cypher_files, interchange_file, skos_file
 
 files_job = define_asset_job(
     "files_job",
