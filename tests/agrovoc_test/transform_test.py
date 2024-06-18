@@ -1,10 +1,9 @@
 import pytest
+
+from agrovoc.transform import transform
 from graphs2go.models import interchange
 
 from agrovoc.models.release_graph import ReleaseGraph
-from agrovoc.transformers.transformer import (
-    transform_release_graph_to_interchange_models,
-)
 
 
 def test_transform(release_graph_descriptor: ReleaseGraph.Descriptor) -> None:
@@ -15,7 +14,7 @@ def test_transform(release_graph_descriptor: ReleaseGraph.Descriptor) -> None:
         interchange.Relationship,
         interchange.Property,
     }
-    for interchange_model in transform_release_graph_to_interchange_models(
+    for interchange_model in transform(
         release_graph_descriptor
     ):
         actual_interchange_model_class_set.add(interchange_model.__class__)
