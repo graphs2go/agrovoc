@@ -19,7 +19,7 @@ from graphs2go.models import interchange
 from graphs2go.models import rdf
 from graphs2go.rdf_stores.rdf_store import RdfStore
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
-from graphs2go.utils.find_file_releases import find_file_releases
+
 
 # Static partitions: scan the release directory once at startup
 releases_partitions_definition = StaticPartitionsDefinition(
@@ -49,13 +49,12 @@ def interchange_graph(
         rdf_store_config=rdf_store_config,
         identifier=URIRef("urn:interchange:" + quote(release_graph.identifier)),
     ) as open_interchange_graph:
-        open_interchange_graph.add_all_if_empty(
+        return open_interchange_graph.add_all_if_empty(
             lambda: tqdm(
                 transform(release_graph),
                 desc="interchange graph models",
             )
-        )
-        return open_interchange_graph.descriptor
+        ).descriptor
 
 
 @asset(code_version="1", partitions_def=releases_partitions_definition)
