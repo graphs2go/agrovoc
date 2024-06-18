@@ -3,9 +3,7 @@ from collections.abc import Iterable
 from graphs2go.models import interchange, skos
 from rdflib import SKOS, URIRef
 
-from agrovoc.models.concept import Concept
-from agrovoc.models.label import Label
-from agrovoc.models.release_graph import ReleaseGraph
+from agrovoc.models import Concept, Label, ReleaseGraph
 
 _CONCEPT_BATCH_SIZE = 100
 
@@ -117,7 +115,7 @@ def __transform_concept(
 #         work_queue.put(tuple(concept_uris_batch))
 
 
-def transform_release_graph_to_interchange_models(
+def transform(
     release_graph_descriptor: ReleaseGraph.Descriptor,
 ) -> Iterable[interchange.Model]:
     with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
