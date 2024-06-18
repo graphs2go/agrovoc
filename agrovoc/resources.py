@@ -32,6 +32,6 @@ class ReleaseConfig(ConfigurableResource):  # type: ignore
         return ReleaseConfig.Parsed(
             directory_path=parse_directory_path_config_value(
                 self.directory_path,
-                default=Path(__file__).parent.parent.parent / "data" / "release",
+                default=Path(__file__).parent.parent / "data" / "release",
             ),
         )

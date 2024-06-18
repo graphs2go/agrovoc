@@ -6,6 +6,7 @@ from dagster import get_dagster_logger
 from rdflib import URIRef
 from tqdm import tqdm
 
+from agrovoc.find_releases import find_releases
 from agrovoc.models.release import Release
 from agrovoc.models.release_graph import ReleaseGraph
 from agrovoc.resources import ReleaseConfig
@@ -24,11 +25,7 @@ from graphs2go.utils.find_file_releases import find_file_releases
 releases_partitions_definition = StaticPartitionsDefinition(
     [
         release.to_partition_key()
-        for release in find_file_releases(
-            logger=get_dagster_logger(),
-            release_directory_path=ReleaseConfig.from_env_vars().parse().directory_path,
-            release_factory=Release,
-        )
+        for release in find_releases(ReleaseConfig.from_env_vars())
     ]
 )
 

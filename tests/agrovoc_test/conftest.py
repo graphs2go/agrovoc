@@ -3,21 +3,17 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
+
+from agrovoc.find_releases import find_releases
 from graphs2go.models import interchange, skos
 from graphs2go.resources.output_config import OutputConfig
 from graphs2go.resources.rdf_store_config import RdfStoreConfig
 from graphs2go.utils.configure_markus import configure_markus
 from graphs2go.utils.load_dotenv import load_dotenv
 
-from agrovoc.assets.interchange_graph import (
-    interchange_graph as interchange_graph_asset,
-)
-from agrovoc.assets.release_graph import release_graph as release_graph_asset
-from agrovoc.assets.skos_graph import skos_graph as skos_graph_asset
-from agrovoc.models.release import Release
-from agrovoc.models.release_graph import ReleaseGraph
-from agrovoc.resources.release_config import ReleaseConfig
-from agrovoc.utils.find_releases import find_releases
+from agrovoc import assets
+from agrovoc.models import Release, ReleaseGraph
+from agrovoc.resources import ReleaseConfig
 
 load_dotenv()
 configure_markus()
@@ -38,7 +34,7 @@ def interchange_graph(
 def interchange_graph_descriptor(
     rdf_store_config: RdfStoreConfig, release_graph: ReleaseGraph
 ) -> interchange.Graph.Descriptor:
-    return interchange_graph_asset(
+    return assets.interchange_graph(
         rdf_store_config=rdf_store_config, release_graph=release_graph
     )  # type: ignore
 
@@ -79,7 +75,7 @@ def release_graph(
 def release_graph_descriptor(
     rdf_store_config: RdfStoreConfig, release: Release
 ) -> ReleaseGraph.Descriptor:
-    return release_graph_asset(rdf_store_config=rdf_store_config, release=release)  # type: ignore
+    return assets.release_graph(rdf_store_config=rdf_store_config, release=release)  # type: ignore
 
 
 @pytest.fixture(scope="session")
@@ -87,7 +83,7 @@ def skos_graph_descriptor(
     interchange_graph_descriptor: interchange.Graph.Descriptor,
     rdf_store_config: RdfStoreConfig,
 ) -> skos.Graph.Descriptor:
-    return skos_graph_asset(
+    return assets.skos_graph(
         interchange_graph=interchange_graph_descriptor,
         rdf_store_config=rdf_store_config,
     )  # type: ignore
