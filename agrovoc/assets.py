@@ -19,7 +19,9 @@ from tqdm import tqdm
 from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
 from agrovoc.resources import ReleaseConfig
-from agrovoc.transform import transform
+from agrovoc.transform_release_graph_to_interchange_models import (
+    transform_release_graph_to_interchange_models,
+)
 
 # Static partitions: scan the release directory once at startup
 releases_partitions_definition = StaticPartitionsDefinition(
@@ -51,7 +53,7 @@ def interchange_graph(
     ) as open_interchange_graph:
         return open_interchange_graph.add_all_if_empty(
             lambda: tqdm(
-                transform(release_graph),
+                transform_release_graph_to_interchange_models(release_graph),
                 desc="interchange graph models",
             )
         ).descriptor

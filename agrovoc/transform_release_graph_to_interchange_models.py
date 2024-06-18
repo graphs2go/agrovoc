@@ -115,7 +115,7 @@ def __transform_concept(
 #         work_queue.put(tuple(concept_uris_batch))
 
 
-def transform(
+def transform_release_graph_to_interchange_models(
     release_graph_descriptor: ReleaseGraph.Descriptor,
 ) -> Iterable[interchange.Model]:
     with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
