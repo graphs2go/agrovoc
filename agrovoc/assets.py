@@ -17,8 +17,7 @@ from rdflib import URIRef
 from tqdm import tqdm
 
 from agrovoc.find_releases import find_releases
-from agrovoc.models.release import Release
-from agrovoc.models.release_graph import ReleaseGraph
+from agrovoc.models import Release, ReleaseGraph
 from agrovoc.resources import ReleaseConfig
 from agrovoc.transform import transform
 
