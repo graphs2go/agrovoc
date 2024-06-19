@@ -132,7 +132,7 @@ def transform_release_graph_to_interchange_models(
         ).set_modified(concept_scheme.modified).build()
         yield from __transform_labels(concept_scheme)
 
-        for concept in release_graph.concepts:
+        for concept in release_graph.concepts():
             yield from __transform_concept(
                 concept=concept, concept_scheme_iri=concept_scheme.iri
             )
