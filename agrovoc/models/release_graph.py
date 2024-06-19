@@ -12,12 +12,10 @@ class ReleaseGraph(rdf.Graph[rdf.Model]):
         # For performance reasons, don't check if it's actually a Concept
         return Concept(rdf.NamedResource(graph=self.rdflib_graph, iri=iri))
 
-    @property
     def concepts(self) -> Iterable[Concept]:
         for concept_iri in self.concept_iris:
             yield self.concept_by_iri(concept_iri)
 
-    @property
     def concept_iris(self) -> Iterable[URIRef]:
         for concept_iri in self.rdflib_graph.subjects(
             predicate=RDF.type, object=SKOS.Concept, unique=True

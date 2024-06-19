@@ -27,11 +27,9 @@ def __transform_labels(model: skos.LabeledModel) -> Iterable[interchange.Model]:
 def __transform_concept(
     *, concept: Concept, concept_scheme_iri: URIRef
 ) -> Iterable[interchange.Model]:
-    yield interchange.Node.builder(iri=concept.iri).add_rdf_type(
-        SKOS.Concept
-    ).set_created(concept.created.value_or(None)).set_modified(
-        concept.modified.value_or(None)
-    ).build()
+    yield interchange.Node.builder(iri=concept.iri).add_type(SKOS.Concept).set_created(
+        concept.created.value_or(None)
+    ).set_modified(concept.modified.value_or(None)).build()
 
     yield from __transform_labels(concept)
 
@@ -129,7 +127,7 @@ def transform_release_graph_to_interchange_models(
 ) -> Iterable[interchange.Model]:
     with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
         concept_scheme = release_graph.concept_scheme
-        yield interchange.Node.builder(iri=concept_scheme.iri).add_rdf_type(
+        yield interchange.Node.builder(iri=concept_scheme.iri).add_type(
             SKOS.ConceptScheme
         ).set_modified(concept_scheme.modified).build()
         yield from __transform_labels(concept_scheme)

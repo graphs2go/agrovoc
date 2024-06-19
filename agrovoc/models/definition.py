@@ -19,10 +19,6 @@ class Definition(rdf.NamedModel):
             DCTERMS.modified, rdf.Resource.ValueMappers.datetime
         )
 
-    @classmethod
-    def primary_rdf_type(cls) -> URIRef:
-        raise NotImplementedError
-
     @property
     def source(self) -> Maybe[URIRef]:
         return self.resource.optional_value(
