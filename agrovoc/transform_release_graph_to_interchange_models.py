@@ -12,7 +12,7 @@ _CONCEPT_BATCH_SIZE = 100
 
 
 def __transform_labels(model: skos.LabeledModel) -> Iterable[interchange.Model]:
-    for label_type, label in model.lexical_labels:
+    for label_type, label in model.lexical_labels():
         assert isinstance(label, Label)
         yield interchange.Label.builder(
             literal_form=label.literal_form,
@@ -39,7 +39,7 @@ def __transform_concept(
     ).build()
 
     # Handle skos:definition specially since it's a subgraph and not a literal
-    for definition in concept.definitions:
+    for definition in concept.definitions():
         definition_value = definition.value
         if not is_successful(definition_value):
             continue
@@ -55,19 +55,19 @@ def __transform_concept(
         ).build()
 
     # skos:notation statements
-    for notation in concept.notations:
+    for notation in concept.notations():
         yield interchange.Property.builder(
             object_=notation, predicate=SKOS.notation, subject=concept
         ).build()
 
     # All skos:note sub-properties
-    for note_predicate, note in concept.notes:
+    for note_predicate, note in concept.notes():
         yield interchange.Property.builder(
             object_=note, predicate=note_predicate, subject=concept
         ).build()
 
     # All skos:semanticRelation sub-properties
-    for semantic_relation_predicate, related_concept in concept.semantic_relations:
+    for semantic_relation_predicate, related_concept in concept.semantic_relations():
         relationship_builder = interchange.Relationship.builder(
             object_=related_concept,
             predicate=semantic_relation_predicate,

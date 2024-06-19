@@ -13,7 +13,7 @@ class ReleaseGraph(rdf.Graph[rdf.Model]):
         return Concept(rdf.NamedResource(graph=self.rdflib_graph, iri=iri))
 
     def concepts(self) -> Iterable[Concept]:
-        for concept_iri in self.concept_iris:
+        for concept_iri in self.concept_iris():
             yield self.concept_by_iri(concept_iri)
 
     def concept_iris(self) -> Iterable[URIRef]:
