@@ -16,5 +16,5 @@ class Concept(skos.Concept):
         AGROVOC uses skos:definition to point to a custom shape rather than a literal, so it can add created/modified.
         """
 
-        for uri in self._values(SKOS.definition, self._map_term_to_uri):
-            yield Definition(resource=self.resource.graph.resource(uri))
+        for iri in self._values(SKOS.definition, self._map_term_to_iri):
+            yield Definition(resource=self.resource.graph.resource(iri))

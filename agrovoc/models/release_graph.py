@@ -8,27 +8,27 @@ from agrovoc.models.concept_scheme import ConceptScheme
 
 
 class ReleaseGraph(rdf.Graph):
-    def concept_by_uri(self, uri: URIRef) -> Concept:
+    def concept_by_iri(self, iri: URIRef) -> Concept:
         # For performance reasons, don't check if it's actually a Concept
-        return Concept(resource=self.rdflib_graph.resource(uri))
+        return Concept(resource=self.rdflib_graph.resource(iri))
 
     @property
     def concepts(self) -> Iterable[Concept]:
-        for concept_uri in self.concept_uris:
-            yield self.concept_by_uri(concept_uri)
+        for concept_iri in self.concept_iris:
+            yield self.concept_by_iri(concept_iri)
 
     @property
-    def concept_uris(self) -> Iterable[URIRef]:
-        for concept_uri in self.rdflib_graph.subjects(
+    def concept_iris(self) -> Iterable[URIRef]:
+        for concept_iri in self.rdflib_graph.subjects(
             predicate=RDF.type, object=SKOS.Concept, unique=True
         ):
-            assert isinstance(concept_uri, URIRef)
-            yield concept_uri
+            assert isinstance(concept_iri, URIRef)
+            yield concept_iri
 
     @property
     def concept_scheme(self) -> ConceptScheme:
-        for uri in self.rdflib_graph.subjects(
+        for iri in self.rdflib_graph.subjects(
             predicate=RDF.type, object=SKOS.ConceptScheme
         ):
-            return ConceptScheme(resource=self.rdflib_graph.resource(uri))
+            return ConceptScheme(resource=self.rdflib_graph.resource(iri))
         raise ValueError("no skos:ConceptScheme found")

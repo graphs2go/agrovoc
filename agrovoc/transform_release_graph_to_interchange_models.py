@@ -15,14 +15,14 @@ def __transform_labels(model: skos.LabeledModel) -> Iterable[interchange.Model]:
             literal_form=label.literal_form,
             subject=model,
             type_=label_type,
-            uri=label.uri,
+            iri=label.iri,
         ).set_created(label.created).set_modified(label.modified).build()
 
 
 def __transform_concept(
-    *, concept: Concept, concept_scheme_uri: URIRef
+    *, concept: Concept, concept_scheme_iri: URIRef
 ) -> Iterable[interchange.Model]:
-    yield interchange.Node.builder(uri=concept.uri).add_rdf_type(
+    yield interchange.Node.builder(iri=concept.iri).add_rdf_type(
         SKOS.Concept
     ).set_created(concept.created).set_modified(concept.modified).build()
 
@@ -30,7 +30,7 @@ def __transform_concept(
 
     # concept, skos:inScheme, concept scheme
     yield interchange.Relationship.builder(
-        object_=concept_scheme_uri, predicate=SKOS.inScheme, subject=concept
+        object_=concept_scheme_iri, predicate=SKOS.inScheme, subject=concept
     ).build()
 
     # Handle skos:definition specially since it's a subgraph and not a literal
@@ -42,7 +42,7 @@ def __transform_concept(
             object_=definition_value,
             predicate=SKOS.definition,
             subject=concept,
-            uri=definition.uri,
+            iri=definition.iri,
         ).set_created(definition.created).set_modified(definition.modified).set_source(
             definition.source
         ).build()
@@ -78,22 +78,22 @@ def __transform_concept(
 #     output_queue: Queue,
 #     work_queue: JoinableQueue,
 # ) -> None:
-#     (concept_scheme_uri, release_graph_descriptor) = input_
+#     (concept_scheme_iri, release_graph_descriptor) = input_
 #
 #     with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
 #         while True:
-#             concept_uris: tuple[URIRef, ...] | None = work_queue.get()
+#             concept_iris: tuple[URIRef, ...] | None = work_queue.get()
 #
-#             if concept_uris is None:
+#             if concept_iris is None:
 #                 work_queue.task_done()
 #                 break  # Signal from the producer there's no more work
 #
 #             interchange_models: list[interchange.Model] = []  # type: ignore
-#             for concept_uri in concept_uris:
+#             for concept_iri in concept_iris:
 #                 interchange_models.extend(
 #                     __transform_concept(
-#                         concept_scheme_uri=concept_scheme_uri,
-#                         concept=release_graph.concept_by_uri(concept_uri),
+#                         concept_scheme_iri=concept_scheme_iri,
+#                         concept=release_graph.concept_by_iri(concept_iri),
 #                     )
 #                 )
 #             output_queue.put(tuple(interchange_models))
@@ -103,16 +103,16 @@ def __transform_concept(
 # def _transform_concept_producer(
 #     input_: ReleaseGraph.Descriptor, work_queue: JoinableQueue
 # ) -> None:
-#     concept_uris_batch: list[URIRef] = []
+#     concept_iris_batch: list[URIRef] = []
 #     with ReleaseGraph.open(input_, read_only=True) as release_graph:
-#         for concept_uri in release_graph.concept_uris:
-#             concept_uris_batch.append(concept_uri)
-#             if len(concept_uris_batch) == _CONCEPT_BATCH_SIZE:
-#                 work_queue.put(tuple(concept_uris_batch))
-#                 concept_uris_batch = []
+#         for concept_iri in release_graph.concept_iris:
+#             concept_iris_batch.append(concept_iri)
+#             if len(concept_iris_batch) == _CONCEPT_BATCH_SIZE:
+#                 work_queue.put(tuple(concept_iris_batch))
+#                 concept_iris_batch = []
 #
-#     if concept_uris_batch:
-#         work_queue.put(tuple(concept_uris_batch))
+#     if concept_iris_batch:
+#         work_queue.put(tuple(concept_iris_batch))
 
 
 def transform_release_graph_to_interchange_models(
@@ -120,19 +120,19 @@ def transform_release_graph_to_interchange_models(
 ) -> Iterable[interchange.Model]:
     with ReleaseGraph.open(release_graph_descriptor, read_only=True) as release_graph:
         concept_scheme = release_graph.concept_scheme
-        yield interchange.Node.builder(uri=concept_scheme.uri).add_rdf_type(
+        yield interchange.Node.builder(iri=concept_scheme.iri).add_rdf_type(
             SKOS.ConceptScheme
         ).set_modified(concept_scheme.modified).build()
         yield from __transform_labels(concept_scheme)
 
         for concept in release_graph.concepts:
             yield from __transform_concept(
-                concept=concept, concept_scheme_uri=concept_scheme.uri
+                concept=concept, concept_scheme_iri=concept_scheme.iri
             )
 
     # yield from parallel_transform(
     #     consumer=_transform_concept_consumer,
-    #     consumer_input=(concept_scheme.uri, release_graph_descriptor),
+    #     consumer_input=(concept_scheme.iri, release_graph_descriptor),
     #     producer=_transform_concept_producer,
     #     producer_input=release_graph_descriptor,
     # )

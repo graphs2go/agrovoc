@@ -19,7 +19,7 @@ class Definition(rdf.Model):
 
     @property
     def source(self) -> URIRef | None:
-        return self._optional_value(DCTERMS.source, self._map_term_to_uri)
+        return self._optional_value(DCTERMS.source, self._map_term_to_iri)
 
     @property
     def value(self) -> Literal | None:
