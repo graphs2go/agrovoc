@@ -7,7 +7,7 @@ from agrovoc.models.concept import Concept
 from agrovoc.models.concept_scheme import ConceptScheme
 
 
-class ReleaseGraph(rdf.Graph):
+class ReleaseGraph(rdf.Graph[rdf.Model]):
     def concept_by_iri(self, iri: URIRef) -> Concept:
         # For performance reasons, don't check if it's actually a Concept
         return Concept(rdf.NamedResource(graph=self.rdflib_graph, iri=iri))
