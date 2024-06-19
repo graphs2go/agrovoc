@@ -6,7 +6,7 @@ from graphs2go.models import rdf
 from rdflib import DCTERMS, RDF, Literal, URIRef
 
 
-class Definition(rdf.Model):
+class Definition(rdf.NamedModel):
     @property
     def created(self) -> Maybe[datetime]:
         return self.resource.optional_value(

@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from graphs2go.models import skos
+from graphs2go.models import skos, rdf
 from rdflib import SKOS
 
 from agrovoc.models.definition import Definition
@@ -16,5 +16,7 @@ class Concept(skos.Concept):
         AGROVOC uses skos:definition to point to a custom shape rather than a literal, so it can add created/modified.
         """
 
-        for iri in self._values(SKOS.definition, self._map_term_to_iri):
-            yield Definition(resource=self.resource.graph.resource(iri))
+        for resource in self.resource.values(
+            SKOS.definition, rdf.Resource.ValueMappers.named_resource
+        ):
+            yield Definition(resource)
