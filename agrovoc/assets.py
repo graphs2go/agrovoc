@@ -6,6 +6,8 @@ from dagster import (
     asset,
     get_dagster_logger,
 )
+from returns.maybe import Some
+
 from graphs2go.assets.build_cypher_files_asset import build_cypher_files_asset
 from graphs2go.assets.build_interchange_file_asset import build_interchange_file_asset
 from graphs2go.assets.build_skos_file_asset import build_skos_file_asset
@@ -33,12 +35,12 @@ releases_partitions_definition = StaticPartitionsDefinition(
 
 
 cypher_files = build_cypher_files_asset(
-    partitions_def=releases_partitions_definition,
+    partitions_def=Some(releases_partitions_definition)
 )
 
 
 interchange_file = build_interchange_file_asset(
-    partitions_def=releases_partitions_definition,
+    partitions_def=Some(releases_partitions_definition),
     rdf_formats=(rdf.Format.NTRIPLES, rdf.Format.TURTLE),
 )
 
@@ -96,9 +98,9 @@ def release_graph(
 
 
 skos_file = build_skos_file_asset(
-    partitions_def=releases_partitions_definition,
+    partitions_def=Some(releases_partitions_definition),
     rdf_formats=(rdf.Format.NTRIPLES, rdf.Format.TURTLE),
 )
 
 
-skos_graph = build_skos_graph_asset(partitions_def=releases_partitions_definition)
+skos_graph = build_skos_graph_asset(partitions_def=Some(releases_partitions_definition))

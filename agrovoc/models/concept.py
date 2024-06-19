@@ -16,6 +16,7 @@ class Concept(skos.Concept):
         AGROVOC uses skos:definition to point to a custom shape rather than a literal, so it can add created/modified.
         """
 
+        resource: rdf.NamedResource
         for resource in self.resource.values(
             SKOS.definition, rdf.Resource.ValueMappers.named_resource
         ):

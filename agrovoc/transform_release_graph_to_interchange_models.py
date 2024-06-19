@@ -1,5 +1,8 @@
 from collections.abc import Iterable
 
+from returns.maybe import Some
+from returns.pipeline import is_successful
+
 from graphs2go.models import interchange, skos
 from rdflib import SKOS, URIRef
 
@@ -14,9 +17,11 @@ def __transform_labels(model: skos.LabeledModel) -> Iterable[interchange.Model]:
         yield interchange.Label.builder(
             literal_form=label.literal_form,
             subject=model,
-            type_=label_type,
-            iri=label.iri,
-        ).set_created(label.created).set_modified(label.modified).build()
+            type_=Some(label_type),
+            iri=Some(label.iri),
+        ).set_created(label.created.value_or(None)).set_modified(
+            label.modified.value_or(None)
+        ).build()
 
 
 def __transform_concept(
@@ -24,7 +29,9 @@ def __transform_concept(
 ) -> Iterable[interchange.Model]:
     yield interchange.Node.builder(iri=concept.iri).add_rdf_type(
         SKOS.Concept
-    ).set_created(concept.created).set_modified(concept.modified).build()
+    ).set_created(concept.created.value_or(None)).set_modified(
+        concept.modified.value_or(None)
+    ).build()
 
     yield from __transform_labels(concept)
 
@@ -36,15 +43,17 @@ def __transform_concept(
     # Handle skos:definition specially since it's a subgraph and not a literal
     for definition in concept.definitions:
         definition_value = definition.value
-        if definition_value is None:
+        if not is_successful(definition_value):
             continue
         yield interchange.Property.builder(
-            object_=definition_value,
+            object_=definition_value.unwrap(),
             predicate=SKOS.definition,
             subject=concept,
-            iri=definition.iri,
-        ).set_created(definition.created).set_modified(definition.modified).set_source(
-            definition.source
+            iri=Some(definition.iri),
+        ).set_created(definition.created.value_or(None)).set_modified(
+            definition.modified.value_or(None)
+        ).set_source(
+            definition.source.value_or(None)
         ).build()
 
     # skos:notation statements
@@ -67,9 +76,9 @@ def __transform_concept(
             subject=concept,
         )
         if isinstance(related_concept, Concept):
-            relationship_builder.set_created(related_concept.created).set_modified(
-                related_concept.modified
-            )
+            relationship_builder.set_created(
+                related_concept.created.value_or(None)
+            ).set_modified(related_concept.modified.value_or(None))
         yield relationship_builder.build()
 
 
