@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from returns.maybe import Maybe
-
 from graphs2go.models import rdf
 from rdflib import DCTERMS, RDF, Literal, URIRef
+from returns.maybe import Maybe
 
 
 class Definition(rdf.NamedModel):

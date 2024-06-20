@@ -1,10 +1,9 @@
 from collections.abc import Iterable
 
-from returns.maybe import Some
-from returns.pipeline import is_successful
-
 from graphs2go.models import interchange, skos
 from rdflib import SKOS, URIRef
+from returns.maybe import Some
+from returns.pipeline import is_successful
 
 from agrovoc.models import Concept, Label, ReleaseGraph
 

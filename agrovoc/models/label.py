@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from returns.maybe import Maybe
-
-from graphs2go.models import skos, rdf
+from graphs2go.models import rdf, skos
 from rdflib import DCTERMS
+from returns.maybe import Maybe
 
 
 class Label(skos.Label):

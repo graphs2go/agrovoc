@@ -6,21 +6,23 @@ from dagster import (
     asset,
     get_dagster_logger,
 )
-from returns.maybe import Some
 
-from graphs2go.assets.build_cypher_files_asset import build_cypher_files_asset
-from graphs2go.assets.build_interchange_file_asset import build_interchange_file_asset
-from graphs2go.assets.build_skos_file_asset import build_skos_file_asset
-from graphs2go.assets.build_skos_graph_asset import build_skos_graph_asset
+from agrovoc.paths import INPUT_DIRECTORY_PATH
+from graphs2go.assets import (
+    build_cypher_files_asset,
+    build_interchange_file_asset,
+    build_skos_file_asset,
+    build_skos_graph_asset,
+)
 from graphs2go.models import interchange, rdf
-from graphs2go.rdf_stores.rdf_store import RdfStore
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
+from graphs2go.rdf_stores import RdfStore
+from graphs2go.resources import DirectoryInputConfig, RdfStoreConfig
 from rdflib import URIRef
+from returns.maybe import Some
 from tqdm import tqdm
 
 from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
-from agrovoc.resources import ReleaseConfig
 from agrovoc.transform_release_graph_to_interchange_models import (
     transform_release_graph_to_interchange_models,
 )
@@ -29,7 +31,11 @@ from agrovoc.transform_release_graph_to_interchange_models import (
 releases_partitions_definition = StaticPartitionsDefinition(
     [
         release.to_partition_key()
-        for release in find_releases(ReleaseConfig.from_env_vars())
+        for release in find_releases(
+            DirectoryInputConfig.from_env_vars(
+                directory_path_default=INPUT_DIRECTORY_PATH
+            )
+        )
     ]
 )
 

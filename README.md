@@ -17,12 +17,12 @@ AGROVOC Thesaurus data transformation pipelines.
 
 1. [Download the AGROVOC Thesaurus Core Dump nt](https://data.apps.fao.org/catalog/organization/agrovoc).
 2. Expand the .zip file.
-3. Move the `.nt` file to `data/release`.
+3. Move the `.nt` file to `data/input`.
 
 The resulting directory tree should resemble:
 
 * `data/`
-  * `release/`
+  * `input/`
     * `agrovoc_2024-03-05_core.nt`
 
 or similar, depending on the release date.

@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from graphs2go.models import skos, rdf
+from graphs2go.models import rdf, skos
 from rdflib import SKOS
 
 from agrovoc.models.definition import Definition

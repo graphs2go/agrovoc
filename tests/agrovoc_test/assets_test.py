@@ -1,10 +1,9 @@
-from agrovoc import assets
 from dagster import build_asset_context
 from graphs2go.models import interchange
-from graphs2go.resources.output_config import OutputConfig
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
 
+from agrovoc import assets
 from agrovoc.models import Release, ReleaseGraph
+from graphs2go.resources import OutputConfig, RdfStoreConfig
 
 
 def test_cypher_files(

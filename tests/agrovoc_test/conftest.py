@@ -3,16 +3,15 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
+
+from agrovoc.paths import INPUT_DIRECTORY_PATH
 from graphs2go.models import interchange, skos
-from graphs2go.resources.output_config import OutputConfig
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
-from graphs2go.utils.configure_markus import configure_markus
-from graphs2go.utils.load_dotenv import load_dotenv
 
 from agrovoc import assets
 from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
-from agrovoc.resources import ReleaseConfig
+from graphs2go.resources import RdfStoreConfig, OutputConfig, DirectoryInputConfig
+from graphs2go.utils import load_dotenv, configure_markus
 
 load_dotenv()
 configure_markus()
@@ -51,13 +50,13 @@ def rdf_store_config() -> RdfStoreConfig:
 
 
 @pytest.fixture(scope="session")
-def release(release_config: ReleaseConfig) -> Release:
-    return find_releases(release_config=release_config)[0]
+def release(input_config: DirectoryInputConfig) -> Release:
+    return find_releases(input_config=input_config)[0]
 
 
 @pytest.fixture(scope="session")
-def release_config() -> ReleaseConfig:
-    return ReleaseConfig.default()
+def input_config() -> DirectoryInputConfig:
+    return DirectoryInputConfig.default(directory_path_default=INPUT_DIRECTORY_PATH)
 
 
 @pytest.fixture(scope="session")
