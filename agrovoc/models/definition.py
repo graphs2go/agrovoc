@@ -2,25 +2,30 @@ from datetime import datetime
 
 from graphs2go.models import rdf
 from rdflib import DCTERMS, RDF, Literal, URIRef
+from returns.maybe import Maybe
 
 
-class Definition(rdf.Model):
+class Definition(rdf.NamedModel):
     @property
-    def created(self) -> datetime | None:
-        return self._optional_value(DCTERMS.created, self._map_term_to_datetime)
-
-    @property
-    def modified(self) -> datetime | None:
-        return self._optional_value(DCTERMS.modified, self._map_term_to_datetime)
-
-    @classmethod
-    def primary_rdf_type(cls) -> URIRef:
-        raise NotImplementedError
+    def created(self) -> Maybe[datetime]:
+        return self.resource.optional_value(
+            DCTERMS.created, rdf.Resource.ValueMappers.datetime
+        )
 
     @property
-    def source(self) -> URIRef | None:
-        return self._optional_value(DCTERMS.source, self._map_term_to_uri)
+    def modified(self) -> Maybe[datetime]:
+        return self.resource.optional_value(
+            DCTERMS.modified, rdf.Resource.ValueMappers.datetime
+        )
 
     @property
-    def value(self) -> Literal | None:
-        return self._optional_value(RDF.value, self._map_term_to_literal)
+    def source(self) -> Maybe[URIRef]:
+        return self.resource.optional_value(
+            DCTERMS.source, rdf.Resource.ValueMappers.iri
+        )
+
+    @property
+    def value(self) -> Maybe[Literal]:
+        return self.resource.optional_value(
+            RDF.value, rdf.Resource.ValueMappers.literal
+        )

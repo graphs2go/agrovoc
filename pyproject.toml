@@ -12,7 +12,7 @@ authors = ["Minor Gordon <minorg@server.fake>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"

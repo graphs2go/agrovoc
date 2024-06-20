@@ -1,20 +1,23 @@
-from pathlib import Path
-
 from dagster import Definitions
-from graphs2go.resources.output_config import OutputConfig
-from graphs2go.resources.rdf_store_config import RdfStoreConfig
-from graphs2go.utils.configure_markus import configure_markus
-from graphs2go.utils.load_dotenv import load_dotenv
+from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
+from graphs2go.utils import configure_markus, load_dotenv
+from returns.maybe import Some
 
-from agrovoc.assets.cypher_files import cypher_files
-from agrovoc.assets.interchange_file import interchange_file
-from agrovoc.assets.interchange_graph import interchange_graph
-from agrovoc.assets.release import release
-from agrovoc.assets.release_graph import release_graph
-from agrovoc.assets.skos_file import skos_file
-from agrovoc.assets.skos_graph import skos_graph
-from agrovoc.jobs.files_job import files_job
-from agrovoc.resources.release_config import ReleaseConfig
+from agrovoc.assets import (
+    cypher_files,
+    interchange_file,
+    interchange_graph,
+    release,
+    release_graph,
+    skos_file,
+    skos_graph,
+)
+from agrovoc.jobs import files_job
+from agrovoc.paths import (
+    INPUT_DIRECTORY_PATH,
+    OUTPUT_DIRECTORY_PATH,
+    RDF_STORE_DIRECTORY_PATH,
+)
 
 configure_markus()
 load_dotenv()
@@ -32,12 +35,14 @@ definitions = Definitions(
     ],
     jobs=[files_job],
     resources={
+        "input_config": DirectoryInputConfig.from_env_vars(
+            directory_path_default=INPUT_DIRECTORY_PATH
+        ),
         "output_config": OutputConfig.from_env_vars(
-            directory_path_default=Path(__file__).parent.parent / "data" / "output"
+            directory_path_default=OUTPUT_DIRECTORY_PATH
         ),
         "rdf_store_config": RdfStoreConfig.from_env_vars(
-            directory_path_default=Path(__file__).parent.parent / "data" / "oxigraph"
+            directory_path_default=Some(RDF_STORE_DIRECTORY_PATH)
         ),
-        "release_config": ReleaseConfig.from_env_vars(),
     },
 )
