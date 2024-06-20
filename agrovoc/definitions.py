@@ -1,6 +1,4 @@
 from dagster import Definitions
-from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
-from graphs2go.utils import configure_markus, load_dotenv
 from returns.maybe import Some
 
 from agrovoc.assets import (
@@ -8,7 +6,7 @@ from agrovoc.assets import (
     interchange_file,
     interchange_graph,
     release,
-    release_graph,
+    thesaurus,
     skos_file,
     skos_graph,
 )
@@ -18,6 +16,8 @@ from agrovoc.paths import (
     OUTPUT_DIRECTORY_PATH,
     RDF_STORE_DIRECTORY_PATH,
 )
+from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
+from graphs2go.utils import configure_markus, load_dotenv
 
 configure_markus()
 load_dotenv()
@@ -29,7 +29,7 @@ definitions = Definitions(
         interchange_file,
         interchange_graph,
         release,
-        release_graph,
+        thesaurus,
         skos_file,
         skos_graph,
     ],

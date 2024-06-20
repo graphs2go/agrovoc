@@ -1,13 +1,13 @@
 import pytest
 from graphs2go.models import interchange
 
-from agrovoc.models.release_graph import ReleaseGraph
-from agrovoc.transform_release_graph_to_interchange_models import (
-    transform_release_graph_to_interchange_models,
+from agrovoc.models.thesaurus import Thesaurus
+from agrovoc.transform_thesaurus_to_interchange_models import (
+    transform_thesaurus_to_interchange_models,
 )
 
 
-def test_transform(release_graph_descriptor: ReleaseGraph.Descriptor) -> None:
+def test_transform(thesaurus_descriptor: Thesaurus.Descriptor) -> None:
     actual_interchange_model_class_set: set[type[interchange.Model]] = set()
     expected_interchange_model_class_set = {
         interchange.Label,
@@ -15,8 +15,8 @@ def test_transform(release_graph_descriptor: ReleaseGraph.Descriptor) -> None:
         interchange.Relationship,
         interchange.Property,
     }
-    for interchange_model in transform_release_graph_to_interchange_models(
-        release_graph_descriptor
+    for interchange_model in transform_thesaurus_to_interchange_models(
+        thesaurus_descriptor
     ):
         actual_interchange_model_class_set.add(interchange_model.__class__)
         if expected_interchange_model_class_set == actual_interchange_model_class_set:
