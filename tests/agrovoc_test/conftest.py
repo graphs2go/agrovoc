@@ -30,10 +30,10 @@ def interchange_graph(
 
 @pytest.fixture(scope="session")
 def interchange_graph_descriptor(
-    rdf_store_config: RdfStoreConfig, thesaurus: Thesaurus
+    rdf_store_config: RdfStoreConfig, thesaurus_descriptor: Thesaurus.Descriptor
 ) -> interchange.Graph.Descriptor:
     return assets.interchange_graph(
-        rdf_store_config=rdf_store_config, thesaurus=thesaurus
+        rdf_store_config=rdf_store_config, thesaurus=thesaurus_descriptor
     )  # type: ignore
 
 
