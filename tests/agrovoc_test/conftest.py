@@ -3,14 +3,18 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-from graphs2go.models import interchange, skos
-from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
-from graphs2go.utils import configure_markus, load_dotenv
+from returns.maybe import Some
 
 from agrovoc import assets
 from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
-from agrovoc.paths import INPUT_DIRECTORY_PATH
+from agrovoc.paths import (
+    INPUT_DIRECTORY_PATH,
+    RDF_STORE_DIRECTORY_PATH,
+)
+from graphs2go.models import interchange, skos
+from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
+from graphs2go.utils import configure_markus, load_dotenv
 
 load_dotenv()
 configure_markus()
@@ -43,9 +47,7 @@ def output_config(tmp_path: Path) -> OutputConfig:
 
 @pytest.fixture(scope="session")
 def rdf_store_config() -> RdfStoreConfig:
-    return RdfStoreConfig.default(
-        directory_path_default=Path(__file__).parent.parent.parent / "data" / "oxigraph"
-    )
+    return RdfStoreConfig.default(directory_path_default=Some(RDF_STORE_DIRECTORY_PATH))
 
 
 @pytest.fixture(scope="session")

@@ -1,6 +1,5 @@
 from dagster import Definitions
-from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
-from graphs2go.utils import configure_markus, load_dotenv
+from returns.maybe import Some
 
 from agrovoc.assets import (
     cypher_files,
@@ -12,7 +11,13 @@ from agrovoc.assets import (
     skos_graph,
 )
 from agrovoc.jobs import files_job
-from agrovoc.paths import DATA_DIRECTORY_PATH, INPUT_DIRECTORY_PATH
+from agrovoc.paths import (
+    INPUT_DIRECTORY_PATH,
+    RDF_STORE_DIRECTORY_PATH,
+    OUTPUT_DIRECTORY_PATH,
+)
+from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
+from graphs2go.utils import configure_markus, load_dotenv
 
 configure_markus()
 load_dotenv()
@@ -34,10 +39,10 @@ definitions = Definitions(
             directory_path_default=INPUT_DIRECTORY_PATH
         ),
         "output_config": OutputConfig.from_env_vars(
-            directory_path_default=DATA_DIRECTORY_PATH / "output"
+            directory_path_default=OUTPUT_DIRECTORY_PATH
         ),
         "rdf_store_config": RdfStoreConfig.from_env_vars(
-            directory_path_default=DATA_DIRECTORY_PATH / "oxigraph"
+            directory_path_default=Some(RDF_STORE_DIRECTORY_PATH)
         ),
     },
 )
