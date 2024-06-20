@@ -6,8 +6,6 @@ from dagster import (
     asset,
     get_dagster_logger,
 )
-
-from agrovoc.paths import INPUT_DIRECTORY_PATH
 from graphs2go.assets import (
     build_cypher_files_asset,
     build_interchange_file_asset,
@@ -23,6 +21,7 @@ from tqdm import tqdm
 
 from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
+from agrovoc.paths import INPUT_DIRECTORY_PATH
 from agrovoc.transform_release_graph_to_interchange_models import (
     transform_release_graph_to_interchange_models,
 )

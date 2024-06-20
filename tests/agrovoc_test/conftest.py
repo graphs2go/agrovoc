@@ -3,15 +3,14 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-
-from agrovoc.paths import INPUT_DIRECTORY_PATH
 from graphs2go.models import interchange, skos
+from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
+from graphs2go.utils import configure_markus, load_dotenv
 
 from agrovoc import assets
 from agrovoc.find_releases import find_releases
 from agrovoc.models import Release, ReleaseGraph
-from graphs2go.resources import RdfStoreConfig, OutputConfig, DirectoryInputConfig
-from graphs2go.utils import load_dotenv, configure_markus
+from agrovoc.paths import INPUT_DIRECTORY_PATH
 
 load_dotenv()
 configure_markus()
