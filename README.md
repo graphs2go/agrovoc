@@ -42,7 +42,7 @@ For example, to transform the AGROVOC thesaurus into multiple representations an
 ## Structure of this project
 
 * `agrovoc`: Python code
+* `data/input/`: directory containing an AGROVOC thesaurus .nt file
 * `data/output/`: transformed/output data such as RDF versions of the AGROVOC thesaurus
-* `data/release/`: directory containing an AGROVOC thesaurus .nt file
 * `script`: scripts following the [Scripts To Rule Them All](https://github.com/github/scripts-to-rule-them-all) normalized script pattern
 * `tests`: unit tests

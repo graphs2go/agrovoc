@@ -3,4 +3,4 @@ from .concept_scheme import ConceptScheme as ConceptScheme
 from .definition import Definition as Definition
 from .label import Label as Label
 from .release import Release as Release
-from .release_graph import ReleaseGraph as ReleaseGraph
+from .thesaurus import Thesaurus as Thesaurus

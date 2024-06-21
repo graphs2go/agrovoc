@@ -1,13 +1,13 @@
 from collections.abc import Iterable
 
-from graphs2go.models import rdf
 from rdflib import RDF, SKOS, URIRef
 
 from agrovoc.models.concept import Concept
 from agrovoc.models.concept_scheme import ConceptScheme
+from graphs2go.models import rdf
 
 
-class ReleaseGraph(rdf.Graph[rdf.Model]):
+class Thesaurus(rdf.Graph[rdf.Model]):
     def concept_by_iri(self, iri: URIRef) -> Concept:
         # For performance reasons, don't check if it's actually a Concept
         return Concept(rdf.NamedResource(graph=self.rdflib_graph, iri=iri))

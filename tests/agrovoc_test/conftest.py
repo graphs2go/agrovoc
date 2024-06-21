@@ -3,15 +3,15 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import pytest
-from graphs2go.models import interchange, skos
-from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
-from graphs2go.utils import configure_markus, load_dotenv
 from returns.maybe import Some
 
 from agrovoc import assets
 from agrovoc.find_releases import find_releases
-from agrovoc.models import Release, ReleaseGraph
+from agrovoc.models import Release, Thesaurus
 from agrovoc.paths import INPUT_DIRECTORY_PATH, RDF_STORE_DIRECTORY_PATH
+from graphs2go.models import interchange, skos
+from graphs2go.resources import DirectoryInputConfig, OutputConfig, RdfStoreConfig
+from graphs2go.utils import configure_markus, load_dotenv
 
 load_dotenv()
 configure_markus()
@@ -30,10 +30,10 @@ def interchange_graph(
 
 @pytest.fixture(scope="session")
 def interchange_graph_descriptor(
-    rdf_store_config: RdfStoreConfig, release_graph: ReleaseGraph
+    rdf_store_config: RdfStoreConfig, thesaurus_descriptor: Thesaurus.Descriptor
 ) -> interchange.Graph.Descriptor:
     return assets.interchange_graph(
-        rdf_store_config=rdf_store_config, release_graph=release_graph
+        rdf_store_config=rdf_store_config, thesaurus=thesaurus_descriptor
     )  # type: ignore
 
 
@@ -58,20 +58,18 @@ def input_config() -> DirectoryInputConfig:
 
 
 @pytest.fixture(scope="session")
-def release_graph(
-    release_graph_descriptor: ReleaseGraph.Descriptor,
-) -> Iterable[ReleaseGraph]:
-    with ReleaseGraph.open(
-        descriptor=release_graph_descriptor, read_only=True
-    ) as release_graph:
-        yield release_graph
+def thesaurus(
+    thesaurus_descriptor: Thesaurus.Descriptor,
+) -> Iterable[Thesaurus]:
+    with Thesaurus.open(descriptor=thesaurus_descriptor, read_only=True) as thesaurus:
+        yield thesaurus
 
 
 @pytest.fixture(scope="session")
-def release_graph_descriptor(
+def thesaurus_descriptor(
     rdf_store_config: RdfStoreConfig, release: Release
-) -> ReleaseGraph.Descriptor:
-    return assets.release_graph(rdf_store_config=rdf_store_config, release=release)  # type: ignore
+) -> Thesaurus.Descriptor:
+    return assets.thesaurus(rdf_store_config=rdf_store_config, release=release)  # type: ignore
 
 
 @pytest.fixture(scope="session")
