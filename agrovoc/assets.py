@@ -6,6 +6,15 @@ from dagster import (
     asset,
     get_dagster_logger,
 )
+from graphs2go.assets import (
+    build_cypher_files_asset,
+    build_interchange_file_asset,
+    build_skos_file_asset,
+    build_skos_graph_asset,
+)
+from graphs2go.models import interchange
+from graphs2go.rdf_stores import RdfStore
+from graphs2go.resources import DirectoryInputConfig, RdfStoreConfig
 from rdflib import URIRef
 from returns.maybe import Some
 from tqdm import tqdm
@@ -16,15 +25,6 @@ from agrovoc.paths import INPUT_DIRECTORY_PATH
 from agrovoc.transform_thesaurus_to_interchange_models import (
     transform_thesaurus_to_interchange_models,
 )
-from graphs2go.assets import (
-    build_cypher_files_asset,
-    build_interchange_file_asset,
-    build_skos_file_asset,
-    build_skos_graph_asset,
-)
-from graphs2go.models import interchange
-from graphs2go.rdf_stores import RdfStore
-from graphs2go.resources import DirectoryInputConfig, RdfStoreConfig
 
 # Static partitions: scan the release directory once at startup
 releases_partitions_definition = StaticPartitionsDefinition(
