@@ -1,6 +1,6 @@
 # Graphs2go: AGROVOC Thesaurus
 
-Convert the [AGROVOC Thesaurus](https://agrovoc.fao.org/browse/agrovoc/en/) to Cypher and (back) to SKOS RDF.
+Transform the [AGROVOC Thesaurus](https://agrovoc.fao.org/browse/agrovoc/en/) into Cypher and (back) into SKOS RDF.
 
 ## Getting started
 
@@ -29,7 +29,7 @@ or similar, depending on the release date.
 
 ## Usage
 
-Convert the AGROVOC Thesaurus into Cypher and RDF and serialize them as files in `data/output`:
+Transform the AGROVOC Thesaurus into Cypher and RDF and serialize them as files in `data/output`:
 
     jobs/files
 
