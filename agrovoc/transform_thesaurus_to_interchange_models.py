@@ -13,22 +13,29 @@ _CONCEPT_BATCH_SIZE = 100
 def __transform_labels(model: skos.LabeledModel) -> Iterable[interchange.Model]:
     for label_type, label in model.lexical_labels():
         assert isinstance(label, Label)
-        yield interchange.Label.builder(
-            literal_form=label.literal_form,
-            subject=model,
-            type_=Some(label_type),
-            iri=Some(label.iri),
-        ).set_created(label.created.value_or(None)).set_modified(
-            label.modified.value_or(None)
-        ).build()
+        yield (
+            interchange.Label.builder(
+                literal_form=label.literal_form,
+                subject=model,
+                type_=Some(label_type),
+                iri=Some(label.iri),
+            )
+            .set_created(label.created.value_or(None))
+            .set_modified(label.modified.value_or(None))
+            .build()
+        )
 
 
 def __transform_concept(
     *, concept: Concept, concept_scheme_iri: URIRef
 ) -> Iterable[interchange.Model]:
-    yield interchange.Node.builder(iri=concept.iri).add_type(SKOS.Concept).set_created(
-        concept.created.value_or(None)
-    ).set_modified(concept.modified.value_or(None)).build()
+    yield (
+        interchange.Node.builder(iri=concept.iri)
+        .add_type(SKOS.Concept)
+        .set_created(concept.created.value_or(None))
+        .set_modified(concept.modified.value_or(None))
+        .build()
+    )
 
     yield from __transform_labels(concept)
 
@@ -42,16 +49,18 @@ def __transform_concept(
         definition_value = definition.value
         if not is_successful(definition_value):
             continue
-        yield interchange.Property.builder(
-            object_=definition_value.unwrap(),
-            predicate=SKOS.definition,
-            subject=concept,
-            iri=Some(definition.iri),
-        ).set_created(definition.created.value_or(None)).set_modified(
-            definition.modified.value_or(None)
-        ).set_source(
-            definition.source.value_or(None)
-        ).build()
+        yield (
+            interchange.Property.builder(
+                object_=definition_value.unwrap(),
+                predicate=SKOS.definition,
+                subject=concept,
+                iri=Some(definition.iri),
+            )
+            .set_created(definition.created.value_or(None))
+            .set_modified(definition.modified.value_or(None))
+            .set_source(definition.source.value_or(None))
+            .build()
+        )
 
     # skos:notation statements
     for notation in concept.notations():
@@ -126,9 +135,12 @@ def transform_thesaurus_to_interchange_models(
 ) -> Iterable[interchange.Model]:
     with Thesaurus.open(thesaurus_descriptor, read_only=True) as thesaurus:
         concept_scheme = thesaurus.concept_scheme
-        yield interchange.Node.builder(iri=concept_scheme.iri).add_type(
-            SKOS.ConceptScheme
-        ).set_modified(concept_scheme.modified).build()
+        yield (
+            interchange.Node.builder(iri=concept_scheme.iri)
+            .add_type(SKOS.ConceptScheme)
+            .set_modified(concept_scheme.modified)
+            .build()
+        )
         yield from __transform_labels(concept_scheme)
 
         for concept in thesaurus.concepts():

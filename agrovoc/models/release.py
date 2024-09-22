@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os.path
 from base64 import b64decode, b64encode
 from datetime import date
 from pathlib import Path
@@ -14,12 +13,12 @@ class Release:
     """
 
     def __init__(self, file_path: Path):
-        file_stem, file_ext = os.path.splitext(file_path.name.lower())
+        file_stem = Path(file_path.name.lower()).stem
         if not file_stem.startswith("agrovoc_"):
             raise ValueError(str(file_path) + " file name does not start with agrovoc_")
         if not file_stem.endswith("_core"):
             raise ValueError(str(file_path) + " file name does not end with _core")
-        if file_ext != ".nt":
+        if Path(file_path.name.lower()).suffix != ".nt":
             raise ValueError(str(file_path) + " does not have .nt extension")
         self.__nt_file_path = file_path
 
