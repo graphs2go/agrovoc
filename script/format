@@ -5,4 +5,4 @@ set -e
 cd "$(dirname "$0")/.."
 
 poetry run isort agrovoc tests
-poetry run black agrovoc tests
+poetry run ruff format agrovoc tests

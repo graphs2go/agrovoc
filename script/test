@@ -4,6 +4,6 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-poetry run black --check agrovoc tests
+poetry run ruff format --check agrovoc tests
+poetry run ruff check agrovoc tests
 poetry run mypy agrovoc tests
-poetry run ruff agrovoc tests
