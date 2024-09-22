@@ -1,19 +1,19 @@
-# AGROVOC
+# Graphs2go: AGROVOC
 
-AGROVOC Thesaurus data transformation pipelines.
+Convert the [AGROVOC Thesaurus](https://agrovoc.fao.org/browse/agrovoc/en/) to Cypher and (back) to SKOS RDF.
 
-## Prerequisites
+## Getting started
+
+### Prerequisites
 
 * [Python](https://www.python.org/)
 * [Python Poetry](https://python-poetry.org/)
-
-## One-time setup
 
 ### Install Python dependencies
 
     script/bootstrap
 
-### Download the AGROVOC thesaurus
+### Download the AGROVOC Thesaurus
 
 1. [Download the AGROVOC Thesaurus Core Dump nt](https://data.apps.fao.org/catalog/organization/agrovoc).
 2. Expand the .zip file.
@@ -27,22 +27,10 @@ The resulting directory tree should resemble:
 
 or similar, depending on the release date.
 
-## Running
+## Usage
 
-### From an installed Poetry virtual environment (recommended for OS X)
-
-#### Run a Dagster pipeline
-
-The code includes multiple [Dagster](https://dagster.io/) pipelines. Each pipeline (a Dagster "job") has a corresponding shell script in `jobs/`.
-
-For example, to transform the AGROVOC thesaurus into multiple representations and serialize them as files in `data/output`, run:
+Convert the AGROVOC Thesaurus into Cypher and RDF and serialize them as files in `data/output`:
 
     jobs/files
 
-## Structure of this project
-
-* `agrovoc`: Python code
-* `data/input/`: directory containing an AGROVOC thesaurus .nt file
-* `data/output/`: transformed/output data such as RDF versions of the AGROVOC thesaurus
-* `script`: scripts following the [Scripts To Rule Them All](https://github.com/github/scripts-to-rule-them-all) normalized script pattern
-* `tests`: unit tests
+Due to a limitation in Dagster, the script will not exit when all the files have been generated. You will have to terminate it with ^C after the last file has been written.
