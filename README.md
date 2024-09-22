@@ -1,4 +1,4 @@
-# Graphs2go: AGROVOC
+# Graphs2go: AGROVOC Thesaurus
 
 Convert the [AGROVOC Thesaurus](https://agrovoc.fao.org/browse/agrovoc/en/) to Cypher and (back) to SKOS RDF.
 
@@ -33,4 +33,6 @@ Convert the AGROVOC Thesaurus into Cypher and RDF and serialize them as files in
 
     jobs/files
 
-Due to a limitation in Dagster, the script will not exit when all the files have been generated. You will have to terminate it with ^C after the last file has been written.
+Due to a limitation in Dagster, the script will not exit when all the files have been generated. You will have to terminate it with ^C after you see the message:
+
+    Shutting down Dagster code server
