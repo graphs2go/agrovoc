@@ -6,7 +6,7 @@ Transform the [AGROVOC Thesaurus](https://agrovoc.fao.org/browse/agrovoc/en/) in
 
 ### Prerequisites
 
-* [Python](https://www.python.org/)
+* [Python 3.12](https://www.python.org/)
 * [Python Poetry](https://python-poetry.org/)
 
 ### Install Python dependencies
