@@ -29,10 +29,10 @@ or similar, depending on the release date.
 
 ## Usage
 
-Transform the AGROVOC Thesaurus into Cypher and RDF and serialize them as files in `data/output`:
+Start the Dagster daemon:
+
+    script/dagster-daemon
+
+Launch a Dagster job to transform the AGROVOC Thesaurus into Cypher and RDF and serialize them as files in `data/output`:
 
     jobs/files
-
-Due to a limitation in Dagster, the script will not exit when all the files have been generated. You will have to terminate it with ^C after you see the message:
-
-    Shutting down Dagster code server
